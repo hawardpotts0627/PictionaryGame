@@ -559,6 +559,108 @@ select {
   margin-top: 7px;
 }
 
+.screen-guide {
+  display: grid;
+  grid-template-columns: minmax(260px, 360px) 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.screenshot-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: #0d1324;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.26);
+}
+
+.screenshot-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.callout {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 30px;
+  height: 30px;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #101624;
+  border: 3px solid var(--accent);
+  font-weight: 950;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.36);
+}
+
+.guide-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: guide;
+}
+
+.guide-list li {
+  counter-increment: guide;
+  position: relative;
+  padding: 12px 12px 12px 48px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid var(--line);
+  line-height: 1.45;
+}
+
+.guide-list li::before {
+  content: counter(guide);
+  position: absolute;
+  left: 12px;
+  top: 13px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.guide-list strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.guide-list span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.host-spec-note {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface-2));
+  border: 1px solid var(--line);
+}
+
+.host-spec-note p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.host-spec-note p + p {
+  margin-top: 8px;
+}
+
 .spec-list {
   display: grid;
   gap: 10px;
@@ -616,6 +718,10 @@ select {
   }
 
   .spec-list div {
+    grid-template-columns: 1fr;
+  }
+
+  .screen-guide {
     grid-template-columns: 1fr;
   }
 }

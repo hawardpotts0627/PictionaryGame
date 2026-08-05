@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#0e1325" />
     <title>Rules and Specs / ルールと仕様</title>
-    <link rel="stylesheet" href="styles.css?v=20260805-rules" />
+    <link rel="stylesheet" href="styles.css?v=20260805-guide" />
   </head>
   <body>
     <main class="app rules-page">
@@ -15,6 +15,66 @@
           <h1>Shared Phone Pictionary</h1>
         </div>
         <button class="help-button return-to-game" type="button">Close rules</button>
+      </section>
+
+      <section class="rules-section">
+        <p class="label">Screen Map / 画面案内</p>
+        <h2>Where the buttons are</h2>
+        <div class="screen-guide">
+          <div class="screenshot-frame">
+            <img src="assets/game-screen.png" alt="Main game screen with numbered button locations" />
+            <span class="callout" style="--x: 12%; --y: 9%;">1</span>
+            <span class="callout" style="--x: 93%; --y: 4%;">2</span>
+            <span class="callout" style="--x: 39%; --y: 23%;">3</span>
+            <span class="callout" style="--x: 84%; --y: 23%;">4</span>
+            <span class="callout" style="--x: 50%; --y: 36%;">5</span>
+            <span class="callout" style="--x: 50%; --y: 47%;">6</span>
+            <span class="callout" style="--x: 50%; --y: 52%;">7</span>
+            <span class="callout" style="--x: 50%; --y: 64%;">8</span>
+            <span class="callout" style="--x: 50%; --y: 80%;">9</span>
+            <span class="callout" style="--x: 50%; --y: 91%;">10</span>
+          </div>
+          <ol class="guide-list">
+            <li><strong>Rules / Help</strong><span>Open this rulebook in a separate tab. / このルールブックを別タブで開きます。</span></li>
+            <li><strong>Team color</strong><span>Switch the visual theme for the current team. / 現在チームの色テーマを切り替えます。</span></li>
+            <li><strong>Timer</strong><span>Start or pause the turn. Pausing hides the current card. / ターン開始・一時停止。停止中はカードが隠れます。</span></li>
+            <li><strong>Give up</strong><span>End the timer and move to scoring without changing teams. / タイマーを止め、チーム移動せず得点集計に入ります。</span></li>
+            <li><strong>Prompt card</strong><span>The only card currently visible for drawing. / いま描ける、現在表示中のカードです。</span></li>
+            <li><strong>Draw card</strong><span>Draw another card after the timer starts. / タイマー開始後、次のカードを引きます。</span></li>
+            <li><strong>Next team</strong><span>Move manually to the next team after scoring. / 得点集計後、手動で次チームへ移ります。</span></li>
+            <li><strong>Cards drawn</strong><span>Tap point buttons here to add or remove scores. / ここで得点ボタンを押して加点・取消します。</span></li>
+            <li><strong>Scoreboard</strong><span>Tap a score to see card-by-card history. / 得点を押すとカード別履歴を見られます。</span></li>
+            <li><strong>Host panel</strong><span>Open settings, team names, reset controls, and card editing. / 設定、チーム名、リセット、カード編集を開きます。</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="rules-section">
+        <p class="label">Host Panel / ホスト用画面</p>
+        <h2>How to open and use host settings</h2>
+        <div class="screen-guide">
+          <div class="screenshot-frame">
+            <img src="assets/host-screen.png" alt="Host settings panel with numbered control locations" />
+            <span class="callout" style="--x: 26%; --y: 54%;">1</span>
+            <span class="callout" style="--x: 48%; --y: 61%;">2</span>
+            <span class="callout" style="--x: 50%; --y: 69%;">3</span>
+            <span class="callout" style="--x: 28%; --y: 79%;">4</span>
+            <span class="callout" style="--x: 50%; --y: 88%;">5</span>
+            <span class="callout" style="--x: 50%; --y: 96%;">6</span>
+          </div>
+          <ol class="guide-list">
+            <li><strong>Open host panel</strong><span>Tap “Host settings and card list” at the bottom of the game screen. It is closed by default. / 画面下の “Host settings and card list” を押します。通常は閉じています。</span></li>
+            <li><strong>Game settings</strong><span>Change team count, cards per turn, seconds, and round limit. Rounds set to Unlimited means endless play. / チーム数、1ターンの枚数、秒数、ラウンド数を変更します。Unlimited は無限です。</span></li>
+            <li><strong>Host actions</strong><span>Apply settings, reset current progress, or return the browser to the default setup. / 設定反映、進行リセット、初期設定への復帰を行います。</span></li>
+            <li><strong>Team names</strong><span>Edit team names. The team color remains the team identity. / チーム名を編集します。チーム色はそのまま識別に使います。</span></li>
+            <li><strong>Card library</strong><span>Search cards, add new cards, choose category, and choose point value. / カード検索、新規追加、カテゴリ、得点設定を行います。</span></li>
+            <li><strong>Edit and delete cards</strong><span>Existing card text and score can be edited. Delete removes the card from this browser’s saved deck. / 既存カードの文言・得点を編集できます。Delete はこのブラウザの保存デッキから削除します。</span></li>
+          </ol>
+        </div>
+        <div class="host-spec-note">
+          <p><strong>English:</strong> Host changes are saved in this browser only. They do not sync to other phones. The host panel does not need to stay open during play.</p>
+          <p><strong>日本語:</strong> ホスト設定やカード編集は、このブラウザ内だけに保存されます。他のスマホには同期されません。プレイ中、ホスト用画面は閉じたままでかまいません。</p>
+        </div>
       </section>
 
       <section class="rules-section">
