@@ -761,7 +761,6 @@ select {
   .rules-closed {
     width: 100%;
     max-width: 100%;
-    overflow: hidden;
     padding: 14px;
     border-radius: 16px;
   }
@@ -798,6 +797,15 @@ select {
   .guide-list span,
   .host-spec-note p {
     font-size: 12px;
+  }
+
+  .rules-section li,
+  .rules-section p,
+  .rules-section dd,
+  .guide-list span,
+  .inline-english p {
+    word-break: auto-phrase;
+    overflow-wrap: anywhere;
   }
 
   .spec-list div {
