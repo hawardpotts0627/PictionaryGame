@@ -14,7 +14,7 @@
           <p class="kicker">Help / Rules / Specifications</p>
           <h1>Shared Phone Pictionary</h1>
         </div>
-        <button class="help-button return-to-game" type="button">Return to game</button>
+        <button class="help-button return-to-game" type="button">Close rules</button>
       </section>
 
       <section class="rules-section">
@@ -81,20 +81,35 @@
         </dl>
       </section>
 
-      <button class="return-bar return-to-game" type="button">Return to game</button>
+      <section class="rules-closed" id="rulesClosed" hidden>
+        <p class="label">Rules closed</p>
+        <h2>Return to the game tab</h2>
+        <p>This rulebook did not change the game. You can close this tab or switch back to the original game tab.</p>
+        <p>ルールブックはゲームに影響していません。このタブを閉じるか、元のゲームタブに戻ってください。</p>
+      </section>
+
+      <button class="return-bar return-to-game" type="button">Close rules</button>
     </main>
     <script>
+      function showClosedMessage() {
+        document.querySelectorAll(".rules-section, .rules-hero, .return-bar").forEach((item) => {
+          item.hidden = true;
+        });
+        document.getElementById("rulesClosed").hidden = false;
+        document.title = "Rules closed / ルールブックを閉じました";
+      }
+
       document.querySelectorAll(".return-to-game").forEach((button) => {
         button.addEventListener("click", () => {
           if (window.opener && !window.opener.closed) {
             window.opener.focus();
             window.close();
             window.setTimeout(() => {
-              if (!window.closed) window.location.href = "index.html";
+              if (!window.closed) showClosedMessage();
             }, 150);
             return;
           }
-          window.location.href = "index.html";
+          showClosedMessage();
         });
       });
     </script>

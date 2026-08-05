@@ -12,7 +12,7 @@ A one-phone Pictionary helper for a group sharing the same device.
 6. Tap the scored card again to undo the score.
 7. When time runs out, score the cards below, then tap Next team manually.
 8. The host panel contains settings, card editing, and reset controls.
-9. Tap Rules ? for a bilingual rulebook and specification page.
+9. Tap Rules ? for a bilingual rulebook and specification page. Closing the rulebook returns focus to the game when the browser allows it; otherwise it shows a closed message without changing the game.
 
 Card edits are saved in the browser on that phone. The shared GitHub Pages URL does not sync custom edits across different phones.
 
