@@ -391,10 +391,11 @@ function render() {
 
   const current = cardById(state.currentCardId);
   renderPromptImage(current);
-  $("promptCategory").textContent = current ? `${cardNumber(current)} / ${current.category}` : state.turnStarted ? "Draw a card." : "Start the timer, then draw cards.";
-  $("promptText").textContent = current ? current.text : state.ended ? "Game finished" : "Ready";
-  $("promptDifficulty").textContent = current ? current.difficulty : state.turnStarted ? "Turn started" : "Not started";
-  $("promptScore").textContent = current ? `${current.score} pts` : "0 pts";
+  $("promptPanel").classList.toggle("waiting", !current && !state.ended);
+  $("promptCategory").textContent = current ? `${cardNumber(current)} / ${current.category}` : state.turnStarted ? "Now draw cards" : "Turn setup";
+  $("promptText").textContent = current ? current.text : state.ended ? "Game finished" : state.turnStarted ? "Draw a card when your team is ready." : "Start the timer first.";
+  $("promptDifficulty").textContent = current ? current.difficulty : state.turnStarted ? "Timer is running" : "No card yet";
+  $("promptScore").textContent = current ? `${current.score} pts` : "";
 
   renderDrawn();
   renderScoreboard();

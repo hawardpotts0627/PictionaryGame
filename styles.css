@@ -207,6 +207,10 @@ h2 {
   overflow-wrap: anywhere;
 }
 
+.prompt.waiting h3 {
+  font-size: clamp(30px, 9vw, 44px);
+}
+
 .prompt-meta {
   display: flex;
   justify-content: space-between;
@@ -217,6 +221,10 @@ h2 {
 .prompt-meta strong {
   color: var(--text);
   font-size: 26px;
+}
+
+.prompt.waiting .prompt-meta strong:empty {
+  display: none;
 }
 
 .primary,
