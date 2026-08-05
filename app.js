@@ -1,5 +1,5 @@
 const STORAGE_KEY = "phone-pictionary-v2";
-const SETTINGS_VERSION = 10;
+const SETTINGS_VERSION = 11;
 const DEFAULT_SETTINGS = { teamCount: 2, limit: 20, seconds: 120, rounds: 0 };
 
 const colors = [
@@ -78,6 +78,7 @@ const subjects = {
 const animalActions = [
   { add: 0, text: "sleeping" },
   { add: 1, text: "jumping over a puddle" },
+  { add: 1, text: "jumping over a fence" },
   { add: 1, text: "jumping over a suitcase" },
   { add: 2, text: "jumping over a sleeping person" },
   { add: 2, text: "jumping over a small stream" },
