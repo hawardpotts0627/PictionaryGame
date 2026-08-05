@@ -14,3 +14,5 @@ A one-phone Pictionary helper for a group sharing the same device.
 8. The host panel contains settings, card editing, and reset controls.
 
 Card edits are saved in the browser on that phone. The shared GitHub Pages URL does not sync custom edits across different phones.
+
+The default deck is tuned for quick paper-and-pen play: about 2,300 prompts focused on animals, people, objects, places, countries, and concrete situations.

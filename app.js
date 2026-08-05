@@ -1,5 +1,5 @@
 const STORAGE_KEY = "phone-pictionary-v2";
-const SETTINGS_VERSION = 7;
+const SETTINGS_VERSION = 8;
 const DEFAULT_SETTINGS = { teamCount: 2, limit: 20, seconds: 120, rounds: 0 };
 
 const colors = [
@@ -13,7 +13,7 @@ const colors = [
   { name: "White", value: "#e5e7eb", second: "#94a3b8" },
 ];
 
-const categories = ["Animals", "People", "Objects", "Places", "Countries", "Ideas"];
+const categories = ["Animals", "People", "Objects", "Places", "Countries", "States"];
 
 const subjects = {
   Animals: [
@@ -62,11 +62,16 @@ const subjects = {
     "South Korea", "Spain", "Germany", "Vietnam", "New Zealand", "Argentina", "Finland",
     "Indonesia", "South Africa", "Chile", "Portugal", "Switzerland", "Mongolia"
   ],
-  Ideas: [
-    "perspective", "gravity", "jealousy", "silence", "time travel", "deja vu", "coincidence",
-    "reflection", "loneliness", "victory", "confusion", "transparency", "memory", "growth",
-    "contradiction", "trend", "balance", "negative space", "tension", "rhythm", "nostalgia",
-    "luck", "camouflage", "echo", "patience", "speed", "symmetry", "a secret", "a promise"
+  States: [
+    "a power outage", "a sudden rainstorm", "a long silence", "a crowded elevator",
+    "a messy room", "a surprise birthday party", "a lost child", "a broken window",
+    "a spilled drink", "a missing wallet", "a traffic jam", "a school fire drill",
+    "a locked door", "a phone with no battery", "a sleepy morning", "a noisy classroom",
+    "a very windy day", "a forgotten umbrella", "a suitcase that will not close",
+    "a kitchen full of smoke", "a hallway full of balloons", "a waiting room",
+    "a secret note", "a line that never moves", "a team celebrating", "a team arguing",
+    "a child hiding", "a person getting bad news", "a person feeling relieved",
+    "a person trying to stay awake", "a room after a party", "a desk before a deadline"
   ],
 };
 
@@ -86,7 +91,7 @@ const animalActions = [
   { add: 3, text: "stealing a sandwich" },
   { add: 3, text: "waiting at a bus stop" },
   { add: 3, text: "wearing rain boots" },
-  { add: 4, text: "camouflaged in leaves" },
+  { add: 4, text: "lost in tall grass" },
   { add: 4, text: "hosting a tiny tea party" },
   { add: 4, text: "driving a toy car" },
   { add: 4, text: "solving a puzzle" },
@@ -95,13 +100,11 @@ const animalActions = [
   { add: 5, text: "conducting an orchestra" },
   { add: 5, text: "serving as a museum guide" },
   { add: 5, text: "building a blanket fort" },
-  { add: 6, text: "discovering a hidden planet" },
   { add: 6, text: "guarding a treasure chest" },
-  { add: 6, text: "arguing with a tiny robot" },
   { add: 6, text: "teaching a class" },
   { add: 7, text: "trying to look innocent after causing trouble" },
   { add: 7, text: "announcing breaking news on television" },
-  { add: 8, text: "running a very serious courtroom" },
+  { add: 8, text: "interrupting a wedding" },
 ];
 
 const objectChallenges = [
@@ -119,8 +122,8 @@ const objectChallenges = [
   { add: 4, text: (s) => `Draw ${s} arriving in the mail.` },
   { add: 5, text: (s) => `Draw ${s} becoming the center of attention.` },
   { add: 5, text: (s) => `Draw ${s} in a museum display case.` },
-  { add: 6, text: (s) => `Draw ${s} starting a chain reaction.` },
-  { add: 7, text: (s) => `Draw ${s} being mistaken for something dangerous.` },
+  { add: 6, text: (s) => `Draw ${s} causing everyone to panic.` },
+  { add: 7, text: (s) => `Draw ${s} being treated like a dangerous object.` },
 ];
 
 const placeChallenges = [
@@ -137,8 +140,8 @@ const placeChallenges = [
   { add: 4, text: (s) => `Draw ${s} with one object completely out of place.` },
   { add: 5, text: (s) => `Draw ${s} being used for the wrong purpose.` },
   { add: 5, text: (s) => `Draw ${s} during a very awkward silence.` },
-  { add: 6, text: (s) => `Draw ${s} becoming a crime scene.` },
-  { add: 7, text: (s) => `Draw ${s} turning into a stage for an emergency speech.` },
+  { add: 6, text: (s) => `Draw ${s} after something has gone badly wrong.` },
+  { add: 7, text: (s) => `Draw ${s} during an emergency announcement.` },
 ];
 
 const peopleActions = [
@@ -159,17 +162,17 @@ const peopleActions = [
   { add: 3, text: "chasing a runaway hat" },
   { add: 3, text: "protecting a tiny plant" },
   { add: 4, text: "hiding a birthday present" },
-  { add: 4, text: "landing on the moon by mistake" },
+  { add: 4, text: "arriving at the wrong building" },
   { add: 4, text: "pretending to understand a strange machine" },
   { add: 4, text: "leading a tour in the wrong direction" },
-  { add: 5, text: "arguing with a talking mirror" },
+  { add: 5, text: "arguing with their own reflection" },
   { add: 5, text: "escaping from a maze" },
   { add: 5, text: "trying to impress a very bored audience" },
-  { add: 5, text: "making peace between two angry statues" },
-  { add: 6, text: "negotiating with a dragon" },
+  { add: 5, text: "calming down two angry customers" },
+  { add: 6, text: "explaining a mistake to a crowd" },
   { add: 7, text: "pretending everything is fine during a disaster" },
-  { add: 7, text: "being interviewed by aliens" },
-  { add: 8, text: "discovering that gravity stopped working" },
+  { add: 7, text: "being interviewed on live television" },
+  { add: 8, text: "realizing they forgot something very important" },
 ];
 
 const countryChallenges = [
@@ -184,20 +187,27 @@ const countryChallenges = [
   { add: 8, text: (s) => `Draw someone packing a suitcase for ${s}.` },
 ];
 
-const ideaChallenges = [
-  { add: 2, text: (s) => `Draw ${s}.` },
-  { add: 2, text: (s) => `Draw a person experiencing ${s}.` },
-  { add: 3, text: (s) => `Draw a scene that clearly shows ${s}.` },
-  { add: 3, text: (s) => `Draw ${s} in a classroom.` },
-  { add: 4, text: (s) => `Draw someone suddenly understanding ${s}.` },
-  { add: 4, text: (s) => `Draw ${s} as a problem someone must solve.` },
-  { add: 5, text: (s) => `Draw ${s} changing a normal day.` },
-  { add: 5, text: (s) => `Draw ${s} in a crowded room.` },
-  { add: 6, text: (s) => `Draw ${s} causing a misunderstanding.` },
-  { add: 6, text: (s) => `Draw a group of people reacting to ${s}.` },
-  { add: 7, text: (s) => `Draw ${s} spreading through a crowd.` },
-  { add: 8, text: (s) => `Draw ${s} as the twist ending of a story.` },
+const stateChallenges = [
+  { add: 0, text: (s) => `Draw ${s}.` },
+  { add: 1, text: (s) => `Draw a family dealing with ${s}.` },
+  { add: 1, text: (s) => `Draw ${s} at school.` },
+  { add: 2, text: (s) => `Draw ${s} in a small apartment.` },
+  { add: 2, text: (s) => `Draw ${s} during a party.` },
+  { add: 3, text: (s) => `Draw someone trying to hide ${s}.` },
+  { add: 3, text: (s) => `Draw ${s} causing a misunderstanding.` },
+  { add: 4, text: (s) => `Draw ${s} while everyone is in a hurry.` },
+  { add: 4, text: (s) => `Draw ${s} in a public place.` },
+  { add: 5, text: (s) => `Draw ${s} becoming the main problem of the day.` },
 ];
+
+const deckLimits = {
+  Animals: 560,
+  People: 560,
+  Objects: 320,
+  Places: 420,
+  Countries: 150,
+  States: 300,
+};
 
 function hashText(text) {
   let hash = 0;
@@ -212,7 +222,7 @@ function baseScore(category, subject) {
   if (category === "Animals") return 1 + (hashText(subject) % 3) + longWord;
   if (category === "People") return 2 + (hashText(subject) % 3) + longWord;
   if (category === "Countries") return 3 + (hashText(subject) % 3);
-  if (category === "Ideas") return 3 + (hashText(subject) % 3);
+  if (category === "States") return 2 + (hashText(subject) % 3);
   return 2 + (hashText(subject) % 3);
 }
 
@@ -278,8 +288,8 @@ function defaultCards() {
             ? countryChallenges
             : category === "Places"
               ? placeChallenges
-              : category === "Ideas"
-                ? ideaChallenges
+              : category === "States"
+                ? stateChallenges
                 : objectChallenges;
       for (const challenge of challengeSet) {
         const score = scoreFor(category, subject, challenge, id);
@@ -295,7 +305,15 @@ function defaultCards() {
       }
     }
   }
-  return categories.flatMap((category) => byCategory[category]);
+  return categories.flatMap((category) => balancedTake(byCategory[category], deckLimits[category]));
+}
+
+function balancedTake(cards, limit) {
+  return cards
+    .map((card, index) => ({ card, sort: (index % 31) * 10000 + Math.floor(index / 31) }))
+    .sort((a, b) => a.sort - b.sort)
+    .slice(0, limit)
+    .map((item) => item.card);
 }
 
 function makeTeams(count = DEFAULT_SETTINGS.teamCount) {
