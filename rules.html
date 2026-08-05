@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#0e1325" />
     <title>Rules and Specs / ルールと仕様</title>
-    <link rel="stylesheet" href="styles.css?v=20260805-guide" />
+    <link rel="stylesheet" href="styles.css?v=20260805-mobile-guide" />
   </head>
   <body>
     <main class="app rules-page">
@@ -15,6 +15,38 @@
           <h1>Shared Phone Pictionary</h1>
         </div>
         <button class="help-button return-to-game" type="button">Close rules</button>
+      </section>
+
+      <section class="rules-section">
+        <p class="label">日本語</p>
+        <h2>ルールブック</h2>
+        <ol>
+          <li>スマホを1台だけ使い、チームごとに回しながら遊びます。</li>
+          <li>初期設定は、2チーム、1ターン20枚、制限時間120秒、ラウンド無限です。</li>
+          <li>ターン開始時にタイマーを押します。カードはタイマー開始後に引けます。</li>
+          <li>制限時間中、そのターンの上限枚数までカードを引けます。引いたカードの中から任意の数を描いてかまいません。</li>
+          <li>得点できるのは、そのターン中に引いたカードだけです。</li>
+          <li>正解したカードの得点ボタンを押すと得点になります。もう一度押すと取り消せます。</li>
+          <li>残り時間が0になると、現在のカードは隠れます。下のリストで正解カードを集計してから、手動で Next team を押します。</li>
+          <li>タイマーを一時停止すると、現在のカードは隠れます。再開すると同じカードが再び表示されます。</li>
+          <li>Give up はタイマーを終了し、得点集計の状態にします。自動では次のチームに移りません。</li>
+          <li>ホストが設定したラウンド数まで遊びます。Unlimited の場合は、やめるまで続けられます。</li>
+        </ol>
+        <details class="language-toggle">
+          <summary>English rulebook</summary>
+          <ol>
+            <li>Use one shared phone and pass it between teams.</li>
+            <li>The default setup is 2 teams, 20 cards per turn, 120 seconds, and unlimited rounds.</li>
+            <li>At the start of a turn, tap the timer. Cards can be drawn only after the timer starts.</li>
+            <li>During the turn, draw up to the card limit. The team may attempt any number of the cards drawn that turn.</li>
+            <li>Only cards drawn during the current turn may be scored.</li>
+            <li>Tap a card's point button when that card was successfully drawn and guessed. Tap it again to remove the score.</li>
+            <li>When time reaches 0, the current card is hidden. Score the successful cards below, then tap Next team manually.</li>
+            <li>If the timer is paused, the current card is hidden. Resume the timer to show the same card again.</li>
+            <li>Give up ends the timer and moves the turn to the scoring step. It does not automatically change teams.</li>
+            <li>The game continues until the host's round limit is reached. If rounds are Unlimited, play continues until the group stops.</li>
+          </ol>
+        </details>
       </section>
 
       <section class="rules-section">
@@ -35,95 +67,18 @@
             <span class="callout" style="--x: 50%; --y: 91%;">10</span>
           </div>
           <ol class="guide-list">
-            <li><strong>Rules / Help</strong><span>Open this rulebook in a separate tab. / このルールブックを別タブで開きます。</span></li>
-            <li><strong>Team color</strong><span>Switch the visual theme for the current team. / 現在チームの色テーマを切り替えます。</span></li>
-            <li><strong>Timer</strong><span>Start or pause the turn. Pausing hides the current card. / ターン開始・一時停止。停止中はカードが隠れます。</span></li>
-            <li><strong>Give up</strong><span>End the timer and move to scoring without changing teams. / タイマーを止め、チーム移動せず得点集計に入ります。</span></li>
-            <li><strong>Prompt card</strong><span>The only card currently visible for drawing. / いま描ける、現在表示中のカードです。</span></li>
-            <li><strong>Draw card</strong><span>Draw another card after the timer starts. / タイマー開始後、次のカードを引きます。</span></li>
-            <li><strong>Next team</strong><span>Move manually to the next team after scoring. / 得点集計後、手動で次チームへ移ります。</span></li>
-            <li><strong>Cards drawn</strong><span>Tap point buttons here to add or remove scores. / ここで得点ボタンを押して加点・取消します。</span></li>
-            <li><strong>Scoreboard</strong><span>Tap a score to see card-by-card history. / 得点を押すとカード別履歴を見られます。</span></li>
-            <li><strong>Host panel</strong><span>Open settings, team names, reset controls, and card editing. / 設定、チーム名、リセット、カード編集を開きます。</span></li>
+            <li><strong>Rules / Help</strong><span>このルールブックを別タブで開きます。</span><details class="inline-english"><summary>English</summary><p>Open this rulebook in a separate tab.</p></details></li>
+            <li><strong>Team color</strong><span>現在チームの色テーマを切り替えます。</span><details class="inline-english"><summary>English</summary><p>Switch the visual theme for the current team.</p></details></li>
+            <li><strong>Timer</strong><span>ターン開始・一時停止。停止中はカードが隠れます。</span><details class="inline-english"><summary>English</summary><p>Start or pause the turn. Pausing hides the current card.</p></details></li>
+            <li><strong>Give up</strong><span>タイマーを止め、チーム移動せず得点集計に入ります。</span><details class="inline-english"><summary>English</summary><p>End the timer and move to scoring without changing teams.</p></details></li>
+            <li><strong>Prompt card</strong><span>いま描ける、現在表示中のカードです。</span><details class="inline-english"><summary>English</summary><p>The only card currently visible for drawing.</p></details></li>
+            <li><strong>Draw card</strong><span>タイマー開始後、次のカードを引きます。</span><details class="inline-english"><summary>English</summary><p>Draw another card after the timer starts.</p></details></li>
+            <li><strong>Next team</strong><span>得点集計後、手動で次チームへ移ります。</span><details class="inline-english"><summary>English</summary><p>Move manually to the next team after scoring.</p></details></li>
+            <li><strong>Cards drawn</strong><span>ここで得点ボタンを押して加点・取消します。</span><details class="inline-english"><summary>English</summary><p>Tap point buttons here to add or remove scores.</p></details></li>
+            <li><strong>Scoreboard</strong><span>得点を押すとカード別履歴を見られます。</span><details class="inline-english"><summary>English</summary><p>Tap a score to see card-by-card history.</p></details></li>
+            <li><strong>Host panel</strong><span>設定、チーム名、リセット、カード編集を開きます。</span><details class="inline-english"><summary>English</summary><p>Open settings, team names, reset controls, and card editing.</p></details></li>
           </ol>
         </div>
-      </section>
-
-      <section class="rules-section">
-        <p class="label">Host Panel / ホスト用画面</p>
-        <h2>How to open and use host settings</h2>
-        <div class="screen-guide">
-          <div class="screenshot-frame">
-            <img src="assets/host-screen.png" alt="Host settings panel with numbered control locations" />
-            <span class="callout" style="--x: 26%; --y: 54%;">1</span>
-            <span class="callout" style="--x: 48%; --y: 61%;">2</span>
-            <span class="callout" style="--x: 50%; --y: 69%;">3</span>
-            <span class="callout" style="--x: 28%; --y: 79%;">4</span>
-            <span class="callout" style="--x: 50%; --y: 88%;">5</span>
-            <span class="callout" style="--x: 50%; --y: 96%;">6</span>
-          </div>
-          <ol class="guide-list">
-            <li><strong>Open host panel</strong><span>Tap “Host settings and card list” at the bottom of the game screen. It is closed by default. / 画面下の “Host settings and card list” を押します。通常は閉じています。</span></li>
-            <li><strong>Game settings</strong><span>Change team count, cards per turn, seconds, and round limit. Rounds set to Unlimited means endless play. / チーム数、1ターンの枚数、秒数、ラウンド数を変更します。Unlimited は無限です。</span></li>
-            <li><strong>Host actions</strong><span>Apply settings, reset current progress, or return the browser to the default setup. / 設定反映、進行リセット、初期設定への復帰を行います。</span></li>
-            <li><strong>Team names</strong><span>Edit team names. The team color remains the team identity. / チーム名を編集します。チーム色はそのまま識別に使います。</span></li>
-            <li><strong>Card library</strong><span>Search cards, add new cards, choose category, and choose point value. / カード検索、新規追加、カテゴリ、得点設定を行います。</span></li>
-            <li><strong>Edit and delete cards</strong><span>Existing card text and score can be edited. Delete removes the card from this browser’s saved deck. / 既存カードの文言・得点を編集できます。Delete はこのブラウザの保存デッキから削除します。</span></li>
-          </ol>
-        </div>
-        <div class="host-spec-note">
-          <p><strong>English:</strong> Host changes are saved in this browser only. They do not sync to other phones. The host panel does not need to stay open during play.</p>
-          <p><strong>日本語:</strong> ホスト設定やカード編集は、このブラウザ内だけに保存されます。他のスマホには同期されません。プレイ中、ホスト用画面は閉じたままでかまいません。</p>
-        </div>
-      </section>
-
-      <section class="rules-section">
-        <p class="label">English</p>
-        <h2>Rulebook</h2>
-        <ol>
-          <li>Use one shared phone and pass it between teams.</li>
-          <li>The default setup is 2 teams, 20 cards per turn, 120 seconds, and unlimited rounds.</li>
-          <li>At the start of a turn, tap the timer. Cards can be drawn only after the timer starts.</li>
-          <li>During the turn, draw up to the card limit. The team may attempt any number of the cards drawn that turn.</li>
-          <li>Only cards drawn during the current turn may be scored.</li>
-          <li>Tap a card's point button when that card was successfully drawn and guessed. Tap it again to remove the score.</li>
-          <li>When time reaches 0, the current card is hidden. Score the successful cards below, then tap Next team manually.</li>
-          <li>If the timer is paused, the current card is hidden. Resume the timer to show the same card again.</li>
-          <li>Give up ends the timer and moves the turn to the scoring step. It does not automatically change teams.</li>
-          <li>The game continues until the host's round limit is reached. If rounds are Unlimited, play continues until the group stops.</li>
-        </ol>
-      </section>
-
-      <section class="rules-section">
-        <p class="label">日本語</p>
-        <h2>ルールブック</h2>
-        <ol>
-          <li>スマホを1台だけ使い、チームごとに回しながら遊びます。</li>
-          <li>初期設定は、2チーム、1ターン20枚、制限時間120秒、ラウンド無限です。</li>
-          <li>ターン開始時にタイマーを押します。カードはタイマー開始後に引けます。</li>
-          <li>制限時間中、そのターンの上限枚数までカードを引けます。引いたカードの中から任意の数を描いてかまいません。</li>
-          <li>得点できるのは、そのターン中に引いたカードだけです。</li>
-          <li>正解したカードの得点ボタンを押すと得点になります。もう一度押すと取り消せます。</li>
-          <li>残り時間が0になると、現在のカードは隠れます。下のリストで正解カードを集計してから、手動で Next team を押します。</li>
-          <li>タイマーを一時停止すると、現在のカードは隠れます。再開すると同じカードが再び表示されます。</li>
-          <li>Give up はタイマーを終了し、得点集計の状態にします。自動では次のチームに移りません。</li>
-          <li>ホストが設定したラウンド数まで遊びます。Unlimited の場合は、やめるまで続けられます。</li>
-        </ol>
-      </section>
-
-      <section class="rules-section">
-        <p class="label">English</p>
-        <h2>Specifications</h2>
-        <dl class="spec-list">
-          <div><dt>Device model</dt><dd>One shared browser device. Custom data is saved only in that browser.</dd></div>
-          <div><dt>Default settings</dt><dd>2 teams, 20 cards per turn, 120 seconds, unlimited rounds.</dd></div>
-          <div><dt>Deck</dt><dd>About 2,300 English prompts across Animals, People, Objects, Places, Countries, and States.</dd></div>
-          <div><dt>Scoring</dt><dd>Each card has a 1-10 point score. Higher scores are rarer and generally harder.</dd></div>
-          <div><dt>Images</dt><dd>Reference images may appear for difficult animals, difficult objects or places, and country clues.</dd></div>
-          <div><dt>Persistence</dt><dd>Card additions, edits, deletions, team names, scores, and settings are stored in local browser storage.</dd></div>
-          <div><dt>Reset</dt><dd>Host reset controls can clear progress and return settings to the default setup.</dd></div>
-          <div><dt>This help page</dt><dd>This page opens separately and does not read or change the game state.</dd></div>
-        </dl>
       </section>
 
       <section class="rules-section">
@@ -139,6 +94,50 @@
           <div><dt>リセット</dt><dd>ホスト用のリセット操作で、進行状況を消したり、設定を初期状態に戻したりできます。</dd></div>
           <div><dt>このヘルプページ</dt><dd>ゲームとは別ページで開かれ、ゲーム進行や保存データには影響しません。</dd></div>
         </dl>
+        <details class="language-toggle">
+          <summary>English specifications</summary>
+          <dl class="spec-list">
+            <div><dt>Device model</dt><dd>One shared browser device. Custom data is saved only in that browser.</dd></div>
+            <div><dt>Default settings</dt><dd>2 teams, 20 cards per turn, 120 seconds, unlimited rounds.</dd></div>
+            <div><dt>Deck</dt><dd>About 2,300 English prompts across Animals, People, Objects, Places, Countries, and States.</dd></div>
+            <div><dt>Scoring</dt><dd>Each card has a 1-10 point score. Higher scores are rarer and generally harder.</dd></div>
+            <div><dt>Images</dt><dd>Reference images may appear for difficult animals, difficult objects or places, and country clues.</dd></div>
+            <div><dt>Persistence</dt><dd>Card additions, edits, deletions, team names, scores, and settings are stored in local browser storage.</dd></div>
+            <div><dt>Reset</dt><dd>Host reset controls can clear progress and return settings to the default setup.</dd></div>
+            <div><dt>This help page</dt><dd>This page opens separately and does not read or change the game state.</dd></div>
+          </dl>
+        </details>
+      </section>
+
+      <section class="rules-section">
+        <p class="label">Host Panel / ホスト用画面</p>
+        <h2>How to open and use host settings</h2>
+        <div class="screen-guide host-guide">
+          <div class="screenshot-frame host-shot">
+            <img src="assets/host-screen.png" alt="Host settings panel with numbered control locations" />
+            <span class="callout" style="--x: 26%; --y: 54%;">1</span>
+            <span class="callout" style="--x: 48%; --y: 61%;">2</span>
+            <span class="callout" style="--x: 50%; --y: 69%;">3</span>
+            <span class="callout" style="--x: 28%; --y: 79%;">4</span>
+            <span class="callout" style="--x: 50%; --y: 88%;">5</span>
+            <span class="callout" style="--x: 50%; --y: 96%;">6</span>
+          </div>
+          <ol class="guide-list">
+            <li><strong>Open host panel</strong><span>画面下の “Host settings and card list” を押します。通常は閉じています。</span><details class="inline-english"><summary>English</summary><p>Tap “Host settings and card list” at the bottom of the game screen. It is closed by default.</p></details></li>
+            <li><strong>Game settings</strong><span>チーム数、1ターンの枚数、秒数、ラウンド数を変更します。Unlimited は無限です。</span><details class="inline-english"><summary>English</summary><p>Change team count, cards per turn, seconds, and round limit. Rounds set to Unlimited means endless play.</p></details></li>
+            <li><strong>Host actions</strong><span>設定反映、進行リセット、初期設定への復帰を行います。</span><details class="inline-english"><summary>English</summary><p>Apply settings, reset current progress, or return the browser to the default setup.</p></details></li>
+            <li><strong>Team names</strong><span>チーム名を編集します。チーム色はそのまま識別に使います。</span><details class="inline-english"><summary>English</summary><p>Edit team names. The team color remains the team identity.</p></details></li>
+            <li><strong>Card library</strong><span>カード検索、新規追加、カテゴリ、得点設定を行います。</span><details class="inline-english"><summary>English</summary><p>Search cards, add new cards, choose category, and choose point value.</p></details></li>
+            <li><strong>Edit and delete cards</strong><span>既存カードの文言・得点を編集できます。Delete はこのブラウザの保存デッキから削除します。</span><details class="inline-english"><summary>English</summary><p>Existing card text and score can be edited. Delete removes the card from this browser’s saved deck.</p></details></li>
+          </ol>
+        </div>
+        <div class="host-spec-note">
+          <p><strong>日本語:</strong> ホスト設定やカード編集は、このブラウザ内だけに保存されます。他のスマホには同期されません。プレイ中、ホスト用画面は閉じたままでかまいません。</p>
+          <details class="inline-english">
+            <summary>English</summary>
+            <p>Host changes are saved in this browser only. They do not sync to other phones. The host panel does not need to stay open during play.</p>
+          </details>
+        </div>
       </section>
 
       <section class="rules-closed" id="rulesClosed" hidden>
