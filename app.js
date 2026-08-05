@@ -1,5 +1,5 @@
 const STORAGE_KEY = "phone-pictionary-v2";
-const SETTINGS_VERSION = 12;
+const SETTINGS_VERSION = 13;
 const DEFAULT_SETTINGS = { teamCount: 2, limit: 20, seconds: 120, rounds: 0 };
 
 const colors = [
@@ -54,7 +54,7 @@ const subjects = {
     "a train station plaza", "an observatory", "a market", "an abandoned school", "a harbor",
     "a library", "an art supply store", "a laboratory", "a circus tent", "a courtroom",
     "a museum hallway", "a mountain cabin", "a desert oasis", "a crowded kitchen",
-    "a rainy bus stop", "a floating island", "a secret basement", "a winter festival"
+    "a rainy bus stop", "a floating island", "a basement under a trapdoor", "a winter festival"
   ],
   Countries: [
     "Japan", "France", "Brazil", "Egypt", "India", "Canada", "Mexico", "Italy", "Kenya",
@@ -64,13 +64,13 @@ const subjects = {
   ],
   States: [
     "a power outage", "a sudden rainstorm", "a long silence", "a crowded elevator",
-    "a messy room", "a surprise birthday party", "a lost child", "a broken window",
-    "a spilled drink", "a missing wallet", "a traffic jam", "a school fire drill",
+    "a messy room", "a birthday party with someone covering their eyes", "a child crying beside a map", "a broken window",
+    "a spilled drink", "an open bag with no wallet", "a traffic jam", "a school fire drill",
     "a locked door", "a phone with no battery", "a sleepy morning", "a noisy classroom",
-    "a very windy day", "a forgotten umbrella", "a suitcase that will not close",
+    "a very windy day", "an umbrella left on a train seat", "a suitcase that will not close",
     "a kitchen full of smoke", "a hallway full of balloons", "a waiting room",
-    "a secret note", "a line that never moves", "a team celebrating", "a team arguing",
-    "a child hiding", "a person getting bad news", "a person feeling relieved",
+    "a note taped under a desk", "a line that never moves", "a team celebrating", "a team arguing",
+    "a child hiding", "a person reading a letter with a shocked face", "a person wiping sweat beside a finished exam",
     "a person trying to stay awake", "a room after a party", "a desk before a deadline"
   ],
 };
@@ -106,7 +106,7 @@ const animalActions = [
   { add: 5, text: "building a blanket fort" },
   { add: 6, text: "guarding a treasure chest" },
   { add: 6, text: "teaching a class" },
-  { add: 7, text: "trying to look innocent after causing trouble" },
+  { add: 7, text: "sitting beside an overturned paint can" },
   { add: 7, text: "announcing breaking news on television" },
   { add: 8, text: "interrupting a wedding" },
 ];
@@ -120,42 +120,42 @@ const objectChallenges = [
   { add: 2, text: (s) => `Draw ${s} blocking a doorway.` },
   { add: 3, text: (s) => `Draw ${s} being repaired in a hurry.` },
   { add: 3, text: (s) => `Draw ${s} knocking over a glass of water.` },
-  { add: 3, text: (s) => `Draw ${s} as the only clue in a mystery.` },
+  { add: 3, text: (s) => `Draw ${s} next to muddy footprints.` },
   { add: 4, text: (s) => `Draw ${s} floating down a river.` },
-  { add: 4, text: (s) => `Draw ${s} being protected like a treasure.` },
+  { add: 4, text: (s) => `Draw ${s} inside a locked glass case with two guards.` },
   { add: 4, text: (s) => `Draw ${s} arriving in the mail.` },
-  { add: 5, text: (s) => `Draw ${s} becoming the center of attention.` },
+  { add: 5, text: (s) => `Draw ${s} under a spotlight on a stage.` },
   { add: 5, text: (s) => `Draw ${s} in a museum display case.` },
   { add: 6, text: (s) => `Draw ${s} being carried away by security guards.` },
-  { add: 7, text: (s) => `Draw ${s} being treated like a dangerous object.` },
+  { add: 7, text: (s) => `Draw ${s} inside a circle of warning tape.` },
 ];
 
 const placeChallenges = [
   { add: 0, text: (s) => `Draw ${s}.` },
-  { add: 1, text: (s) => `Draw a lost tourist at ${s}.` },
+  { add: 1, text: (s) => `Draw a tourist holding an upside-down map at ${s}.` },
   { add: 1, text: (s) => `Draw ${s} during heavy rain.` },
   { add: 2, text: (s) => `Draw a locked door at ${s}.` },
   { add: 2, text: (s) => `Draw ${s} at midnight.` },
   { add: 2, text: (s) => `Draw a long line of people at ${s}.` },
   { add: 3, text: (s) => `Draw ${s} after everyone has gone home.` },
   { add: 3, text: (s) => `Draw ${s} during a power outage.` },
-  { add: 3, text: (s) => `Draw a surprise performance at ${s}.` },
+  { add: 3, text: (s) => `Draw a dancer jumping onto a table at ${s}.` },
   { add: 4, text: (s) => `Draw ${s} being flooded with balloons.` },
-  { add: 4, text: (s) => `Draw ${s} with one object completely out of place.` },
+  { add: 4, text: (s) => `Draw ${s} with a bathtub in the middle.` },
   { add: 5, text: (s) => `Draw ${s} with a dinner table set up in the middle.` },
-  { add: 5, text: (s) => `Draw ${s} during a very awkward silence.` },
+  { add: 5, text: (s) => `Draw ${s} with everyone staring at a dropped microphone.` },
   { add: 6, text: (s) => `Draw ${s} with a huge cake dropped on the floor.` },
-  { add: 7, text: (s) => `Draw ${s} during an emergency announcement.` },
+  { add: 7, text: (s) => `Draw ${s} with flashing sirens and people pointing to exits.` },
 ];
 
 const peopleActions = [
   { add: 0, text: "running late for an appointment" },
-  { add: 1, text: "whispering a secret" },
+  { add: 1, text: "whispering behind a menu" },
   { add: 1, text: "balancing on a rope" },
-  { add: 1, text: "searching for lost keys" },
+  { add: 1, text: "searching under a sofa for keys" },
   { add: 1, text: "trying to carry a huge cake" },
-  { add: 1, text: "waiting for an important phone call" },
-  { add: 2, text: "opening a mysterious box" },
+  { add: 1, text: "waiting beside a ringing phone" },
+  { add: 2, text: "opening a shoe box full of ribbons" },
   { add: 2, text: "dodging a sudden rainstorm" },
   { add: 2, text: "carrying too many bags" },
   { add: 2, text: "getting locked out" },
@@ -167,16 +167,16 @@ const peopleActions = [
   { add: 3, text: "protecting a tiny plant" },
   { add: 4, text: "hiding a birthday present" },
   { add: 4, text: "arriving at a dentist's office with a beach suitcase" },
-  { add: 4, text: "pretending to understand a strange machine" },
+  { add: 4, text: "pressing buttons on a machine with too many levers" },
   { add: 4, text: "leading a tour group into a broom closet" },
   { add: 5, text: "arguing with their own reflection" },
   { add: 5, text: "escaping from a maze" },
   { add: 5, text: "trying to impress a very bored audience" },
   { add: 5, text: "calming down two angry customers" },
   { add: 6, text: "apologizing beside a broken vase while everyone stares" },
-  { add: 7, text: "pretending everything is fine during a disaster" },
+  { add: 7, text: "smiling while water pours through the ceiling" },
   { add: 7, text: "being interviewed on live television" },
-  { add: 8, text: "running back for a forgotten passport" },
+  { add: 8, text: "running back to a desk with a passport on it" },
 ];
 
 const countryChallenges = [
@@ -185,7 +185,7 @@ const countryChallenges = [
   { add: 4, text: (s) => `Draw a festival in ${s}.` },
   { add: 5, text: (s) => `Draw ${s} as a crowded souvenir table.` },
   { add: 5, text: (s) => `Draw a sports fan visiting ${s}.` },
-  { add: 6, text: (s) => `Draw a postcard from ${s} with three clues.` },
+  { add: 6, text: (s) => `Draw a postcard from ${s} with three famous landmarks.` },
   { add: 6, text: (s) => `Draw a school trip to ${s}.` },
   { add: 7, text: (s) => `Draw a weather report from ${s}.` },
   { add: 8, text: (s) => `Draw someone packing a suitcase for ${s}.` },
@@ -201,7 +201,7 @@ const stateChallenges = [
   { add: 3, text: (s) => `Draw two people pointing at different doors during ${s}.` },
   { add: 4, text: (s) => `Draw ${s} while everyone is in a hurry.` },
   { add: 4, text: (s) => `Draw ${s} in a public place.` },
-  { add: 5, text: (s) => `Draw ${s} becoming the main problem of the day.` },
+  { add: 5, text: (s) => `Draw ${s} blocking the front door.` },
 ];
 
 const deckLimits = {
