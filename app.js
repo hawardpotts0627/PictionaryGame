@@ -1,5 +1,5 @@
 const STORAGE_KEY = "phone-pictionary-v2";
-const SETTINGS_VERSION = 8;
+const SETTINGS_VERSION = 10;
 const DEFAULT_SETTINGS = { teamCount: 2, limit: 20, seconds: 120, rounds: 0 };
 
 const colors = [
@@ -77,9 +77,12 @@ const subjects = {
 
 const animalActions = [
   { add: 0, text: "sleeping" },
-  { add: 1, text: "jumping over a fence" },
+  { add: 1, text: "jumping over a puddle" },
+  { add: 1, text: "jumping over a suitcase" },
+  { add: 2, text: "jumping over a sleeping person" },
+  { add: 2, text: "jumping over a small stream" },
   { add: 1, text: "chasing a ball" },
-  { add: 1, text: "hiding behind a tree" },
+  { add: 1, text: "knocking over a trash can" },
   { add: 1, text: "guarding a doorway" },
   { add: 1, text: "stealing a snack" },
   { add: 2, text: "wearing a tiny crown" },
@@ -91,7 +94,7 @@ const animalActions = [
   { add: 3, text: "stealing a sandwich" },
   { add: 3, text: "waiting at a bus stop" },
   { add: 3, text: "wearing rain boots" },
-  { add: 4, text: "lost in tall grass" },
+  { add: 4, text: "waiting in a train station" },
   { add: 4, text: "hosting a tiny tea party" },
   { add: 4, text: "driving a toy car" },
   { add: 4, text: "solving a puzzle" },
@@ -130,7 +133,7 @@ const placeChallenges = [
   { add: 0, text: (s) => `Draw ${s}.` },
   { add: 1, text: (s) => `Draw a lost tourist at ${s}.` },
   { add: 1, text: (s) => `Draw ${s} during heavy rain.` },
-  { add: 2, text: (s) => `Draw a hidden door at ${s}.` },
+  { add: 2, text: (s) => `Draw a locked door at ${s}.` },
   { add: 2, text: (s) => `Draw ${s} at midnight.` },
   { add: 2, text: (s) => `Draw a long line of people at ${s}.` },
   { add: 3, text: (s) => `Draw ${s} after everyone has gone home.` },
@@ -251,13 +254,48 @@ const referenceSubjects = new Set([
   "greenhouse", "courtroom", "harbor", "aquarium"
 ]);
 
+const countryReferences = {
+  Japan: [{ label: "Food", title: "Sushi" }, { label: "Place", title: "Mount Fuji" }, { label: "Place", title: "Kiyomizu-dera" }],
+  France: [{ label: "Place", title: "Eiffel Tower" }, { label: "Food", title: "Croissant" }, { label: "Place", title: "Mont Saint-Michel" }],
+  Brazil: [{ label: "Place", title: "Christ the Redeemer (statue)" }, { label: "Food", title: "Feijoada" }, { label: "Place", title: "Amazon rainforest" }],
+  Egypt: [{ label: "Place", title: "Great Pyramid of Giza" }, { label: "Food", title: "Koshary" }, { label: "Place", title: "Abu Simbel" }],
+  India: [{ label: "Place", title: "Taj Mahal" }, { label: "Food", title: "Biryani" }, { label: "Clothing", title: "Sari" }],
+  Canada: [{ label: "Place", title: "Niagara Falls" }, { label: "Food", title: "Poutine" }, { label: "Place", title: "Banff National Park" }],
+  Mexico: [{ label: "Place", title: "Chichen Itza" }, { label: "Food", title: "Taco" }, { label: "Food", title: "Tamale" }],
+  Italy: [{ label: "Place", title: "Colosseum" }, { label: "Food", title: "Pizza" }, { label: "Place", title: "Leaning Tower of Pisa" }],
+  Kenya: [{ label: "Place", title: "Maasai Mara" }, { label: "Food", title: "Ugali" }, { label: "Animal", title: "African elephant" }],
+  Australia: [{ label: "Place", title: "Sydney Opera House" }, { label: "Animal", title: "Kangaroo" }, { label: "Place", title: "Uluru" }],
+  Norway: [{ label: "Place", title: "Geirangerfjord" }, { label: "Food", title: "Lefse" }, { label: "Place", title: "Stave church" }],
+  Thailand: [{ label: "Place", title: "Wat Arun" }, { label: "Food", title: "Pad thai" }, { label: "Vehicle", title: "Tuk-tuk" }],
+  Greece: [{ label: "Place", title: "Parthenon" }, { label: "Food", title: "Souvlaki" }, { label: "Place", title: "Santorini" }],
+  Peru: [{ label: "Place", title: "Machu Picchu" }, { label: "Food", title: "Ceviche" }, { label: "Animal", title: "Llama" }],
+  Morocco: [{ label: "Place", title: "Jemaa el-Fnaa" }, { label: "Food", title: "Tagine" }, { label: "Place", title: "Hassan II Mosque" }],
+  Iceland: [{ label: "Place", title: "Geysir" }, { label: "Place", title: "Blue Lagoon (geothermal spa)" }, { label: "Animal", title: "Icelandic horse" }],
+  Turkey: [{ label: "Place", title: "Hagia Sophia" }, { label: "Food", title: "Baklava" }, { label: "Place", title: "Cappadocia" }],
+  "South Korea": [{ label: "Place", title: "Gyeongbokgung" }, { label: "Food", title: "Kimchi" }, { label: "Food", title: "Bibimbap" }],
+  Spain: [{ label: "Place", title: "Sagrada Familia" }, { label: "Food", title: "Paella" }, { label: "Dance", title: "Flamenco" }],
+  Germany: [{ label: "Place", title: "Brandenburg Gate" }, { label: "Food", title: "Pretzel" }, { label: "Place", title: "Neuschwanstein Castle" }],
+  Vietnam: [{ label: "Place", title: "Ha Long Bay" }, { label: "Food", title: "Pho" }, { label: "Clothing", title: "Ao dai" }],
+  "New Zealand": [{ label: "Place", title: "Milford Sound" }, { label: "Animal", title: "Kiwi (bird)" }, { label: "Food", title: "Pavlova (dessert)" }],
+  Argentina: [{ label: "Place", title: "Iguazu Falls" }, { label: "Food", title: "Empanada" }, { label: "Dance", title: "Tango" }],
+  Finland: [{ label: "Place", title: "Sauna" }, { label: "Food", title: "Karelian pasty" }, { label: "Animal", title: "Reindeer" }],
+  Indonesia: [{ label: "Place", title: "Borobudur" }, { label: "Food", title: "Nasi goreng" }, { label: "Clothing", title: "Batik" }],
+  "South Africa": [{ label: "Place", title: "Table Mountain" }, { label: "Food", title: "Biltong" }, { label: "Animal", title: "African penguin" }],
+  Chile: [{ label: "Place", title: "Easter Island" }, { label: "Place", title: "Atacama Desert" }, { label: "Food", title: "Empanada" }],
+  Portugal: [{ label: "Place", title: "Belém Tower" }, { label: "Food", title: "Pastel de nata" }, { label: "Music", title: "Fado" }],
+  Switzerland: [{ label: "Place", title: "Matterhorn" }, { label: "Food", title: "Fondue" }, { label: "Object", title: "Swiss Army knife" }],
+  Mongolia: [{ label: "Place", title: "Gobi Desert" }, { label: "Home", title: "Yurt" }, { label: "Animal", title: "Mongolian horse" }],
+};
+
 function imageHintsFor(category, subject, score) {
   const cleanSubject = subject.replace(/^(a|an) /, "");
   const hints = [];
   if (category === "Animals" && referenceSubjects.has(cleanSubject)) {
     hints.push({ label: "Animal", title: titleCase(cleanSubject) });
   } else if (category === "Countries") {
-    hints.push({ label: "Country", title: subject });
+    const refs = countryReferences[subject] || [];
+    const start = hashText(subject) % Math.max(1, refs.length);
+    hints.push(...refs.slice(start).concat(refs.slice(0, start)).slice(0, 2));
   } else if (score >= 8 && ["Objects", "Places"].includes(category) && referenceSubjects.has(cleanSubject)) {
     hints.push({ label: category.slice(0, -1), title: titleCase(cleanSubject) });
   }
@@ -299,6 +337,7 @@ function defaultCards() {
           category,
           score,
           difficulty: difficultyFor(score),
+          actionKey: challenge.key || challenge.text("__").replace("__", "").trim(),
           imageHints: imageHintsFor(category, subject, score),
         });
         id += 1;
@@ -407,8 +446,25 @@ function shuffle(items) {
 
 function ensureDeck() {
   if (!state.deck.length) {
-    state.deck = shuffle(state.cards.map((card) => card.id));
+    state.deck = makeBalancedDeck(state.cards);
   }
+}
+
+function makeBalancedDeck(cards) {
+  const remaining = shuffle(cards);
+  const ordered = [];
+  let lastCategory = "";
+  let lastAction = "";
+  while (remaining.length) {
+    let pick = remaining.findIndex((card) => card.category !== lastCategory && card.actionKey !== lastAction);
+    if (pick < 0) pick = remaining.findIndex((card) => card.category !== lastCategory);
+    if (pick < 0) pick = 0;
+    const [card] = remaining.splice(pick, 1);
+    ordered.push(card.id);
+    lastCategory = card.category;
+    lastAction = card.actionKey || "";
+  }
+  return ordered.reverse();
 }
 
 function currentTeam() {
@@ -745,6 +801,7 @@ function addCard() {
     category,
     score,
     difficulty: difficultyFor(score),
+    actionKey: text,
     imageHints: category === "Animals" || score >= 8
       ? [{ label: "Reference", query: text.replace(/^Draw /, "").replace(/[.]/g, "") }]
       : [],
