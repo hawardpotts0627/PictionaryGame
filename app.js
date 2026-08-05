@@ -89,8 +89,8 @@ function makeTeams(count = 3) {
 function freshState() {
   return {
     cards: defaultCards(),
-    teams: makeTeams(3),
-    settings: { teamCount: 3, limit: 8, seconds: 120, rounds: 0 },
+    teams: makeTeams(2),
+    settings: { teamCount: 2, limit: 20, seconds: 120, rounds: 0 },
     currentTeam: 0,
     round: 1,
     deck: [],
