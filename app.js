@@ -289,7 +289,7 @@ function renderPromptImage(card) {
 function render() {
   setTheme();
   $("currentTeam").textContent = currentTeam().name;
-  $("roundStatus").textContent = state.ended ? "Finished" : state.settings.rounds ? `Round ${state.round}/${state.settings.rounds}` : `Round ${state.round}`;
+  $("roundStatus").textContent = state.ended ? "Finished" : state.settings.rounds ? `Round ${state.round}/${state.settings.rounds}` : `Round ${state.round} / ∞`;
   $("timeLeft").textContent = formatTime(state.timeLeft);
   $("timerHint").textContent = state.running ? "Running" : state.turnStarted ? "Pause / resume" : "Tap to start";
   $("drawButton").disabled = !state.turnStarted || (!state.running && state.timeLeft === 0) || state.drawn.length >= state.settings.limit || state.ended;
