@@ -165,6 +165,23 @@ h2 {
   border: 1px solid var(--line);
 }
 
+.prompt-image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 14px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--line);
+}
+
+.prompt-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .prompt p {
   color: var(--accent-2);
   font-weight: 800;
@@ -334,6 +351,8 @@ select {
 
 .host-actions {
   margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
 .team-editor,
@@ -376,12 +395,19 @@ select {
 }
 
 .library-item {
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: auto 1fr auto auto;
 }
 
 .library-item input,
 .library-item select {
   margin: 0;
+}
+
+.card-number {
+  min-width: 72px;
+  color: var(--accent-2);
+  font-size: 12px;
+  font-weight: 900;
 }
 
 .finished {
@@ -400,5 +426,13 @@ select {
 
   .host-grid {
     grid-template-columns: 1fr;
+  }
+
+  .library-item {
+    grid-template-columns: 1fr auto;
+  }
+
+  .library-item input {
+    grid-column: 1 / -1;
   }
 }

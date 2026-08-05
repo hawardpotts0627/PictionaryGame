@@ -1,14 +1,16 @@
-# スマホ・ピクショナリー
+# Shared Phone Pictionary
 
-スマホ1台で遊ぶピクショナリー用の山札・タイマー・得点ツールです。
+A one-phone Pictionary helper for a group sharing the same device.
 
-## 遊び方
+## How to Play
 
-1. ホスト設定でチーム数、制限時間、1ターンのカード上限を決めます。
-2. 現在チームが表示されたら、タイマーをタップして開始します。
-3. 制限時間内にカードを引き、描けたカードだけ得点ボタンをタップします。
-4. 得点済みカードをもう一度タップすると、得点を取り消せます。
-5. 時間切れ、ギブアップ、または次のチームへでターンが移ります。
-6. ランキングの得点をタップすると、どのターンにどのカードで得点したかを見られます。
+1. Open the page on one phone and pass that phone between teams.
+2. The default setup is 2 teams, 20 cards per turn, 120 seconds, unlimited rounds.
+3. Tap the timer to start a turn.
+4. Draw as many cards as the turn limit allows.
+5. Tap a card's score button only if that card was successfully drawn and guessed.
+6. Tap the scored card again to undo the score.
+7. When time runs out, the app advances to the next team automatically.
+8. The host panel contains settings, card editing, and reset controls.
 
-カード編集は端末のブラウザに保存されます。同じスマホでは、次に開いたときも追加・削除・編集が残ります。
+Card edits are saved in the browser on that phone. The shared GitHub Pages URL does not sync custom edits across different phones.

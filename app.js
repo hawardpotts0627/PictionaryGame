@@ -1,84 +1,154 @@
-const STORAGE_KEY = "phone-pictionary-v1";
+const STORAGE_KEY = "phone-pictionary-v2";
+const SETTINGS_VERSION = 2;
+const DEFAULT_SETTINGS = { teamCount: 2, limit: 20, seconds: 120, rounds: 0 };
 
 const colors = [
-  { name: "赤", value: "#e64f55", second: "#ffb45c" },
-  { name: "青", value: "#3f88ff", second: "#6ee7f2" },
-  { name: "緑", value: "#2fbf71", second: "#e6d65a" },
-  { name: "黄", value: "#eab308", second: "#f97316" },
-  { name: "紫", value: "#a855f7", second: "#f472b6" },
-  { name: "水", value: "#06b6d4", second: "#34d399" },
-  { name: "橙", value: "#f97316", second: "#fb7185" },
-  { name: "白", value: "#e5e7eb", second: "#94a3b8" },
+  { name: "Red", value: "#e64f55", second: "#ffb45c" },
+  { name: "Blue", value: "#3f88ff", second: "#6ee7f2" },
+  { name: "Green", value: "#2fbf71", second: "#e6d65a" },
+  { name: "Yellow", value: "#eab308", second: "#f97316" },
+  { name: "Purple", value: "#a855f7", second: "#f472b6" },
+  { name: "Cyan", value: "#06b6d4", second: "#34d399" },
+  { name: "Orange", value: "#f97316", second: "#fb7185" },
+  { name: "White", value: "#e5e7eb", second: "#94a3b8" },
 ];
 
-const categories = ["もの", "動物", "場所", "動作", "概念", "作品風", "美術部向け"];
-const difficulties = ["導入", "普通", "難", "激ムズ", "伝説"];
+const categories = ["Animals", "Actions", "Objects", "Places", "Art", "Ideas"];
 
-const baseWords = {
-  "もの": ["万年筆", "折りたたみ傘", "石膏像", "虫眼鏡", "砂時計", "蓄音機", "鉛筆削り", "鍵束", "彫刻刀", "天球儀", "黒電話", "ランタン", "顕微鏡", "メトロノーム", "チェス盤", "タイプライター", "羅針盤", "招き猫", "絵の具箱", "壊れた時計"],
-  "動物": ["カメレオン", "フクロウ", "クラゲ", "アルマジロ", "タツノオトシゴ", "孔雀", "ヤドカリ", "カモノハシ", "ハリネズミ", "ナマケモノ", "マンタ", "イグアナ", "ペリカン", "サンショウウオ", "キリン", "シーラカンス", "カワウソ", "オオカミ", "トナカイ", "カブトムシ"],
-  "場所": ["地下鉄のホーム", "古本屋", "美術室", "灯台", "温室", "映画館の客席", "神社の参道", "水族館", "屋上庭園", "深夜のコンビニ", "駅前広場", "天文台", "市場", "廃校", "港", "図書館", "画材店", "研究室", "サーカス小屋", "裁判所"],
-  "動作": ["綱渡りをする", "寝坊して走る", "内緒話をする", "転びそうになる", "料理を焦がす", "写真を現像する", "傘を忘れる", "鏡を磨く", "落とし物を探す", "拍手を浴びる", "花束を渡す", "迷子になる", "変装する", "発掘する", "謝る", "合図を送る", "爆笑する", "封印を解く", "早着替えする", "地図を読む"],
-  "概念": ["遠近法", "重力", "嫉妬", "静寂", "タイムスリップ", "既視感", "偶然", "反射", "孤独", "勝利", "混乱", "透明", "記憶", "成長", "矛盾", "流行", "バランス", "余白", "緊張感", "リズム"],
-  "作品風": ["浮世絵風の猫", "キュビスムの自転車", "印象派の雨", "漫画の必殺技", "映画ポスター風の朝食", "古代壁画のスマホ", "抽象画の運動会", "劇画調のプリン", "絵本風の裁判", "広告ポスターの宇宙人", "版画風の温泉", "水墨画のロボット", "ロゴ風の失恋", "ポップアートの寿司", "写実的な魔法", "ステンドグラスの昼寝", "粘土アニメ風の会議", "標識風の友情", "美術館ポスターの遅刻", "図鑑風の怪盗"],
-  "美術部向け": ["クロッキー中の焦り", "パースが崩壊した街", "筆洗バケツ", "乾いていない油絵", "デッサン人形の反乱", "講評会の沈黙", "締切前夜", "影だけで描く友情", "石膏像と目が合う", "構図に悩む人", "補色だけの夕焼け", "消しゴムのかす", "透明水彩のにじみ", "木炭で描いた雷", "巨大なイーゼル", "モデルが動いた瞬間", "額縁の中の部室", "下描きが本番を超える", "絵の具の沼", "一点透視の迷路"],
+const subjects = {
+  Animals: [
+    "a chameleon", "an owl", "a jellyfish", "an armadillo", "a seahorse", "a peacock",
+    "a hermit crab", "a platypus", "a hedgehog", "a sloth", "a manta ray", "an iguana",
+    "a pelican", "a salamander", "a giraffe", "a coelacanth", "an otter", "a wolf",
+    "a reindeer", "a rhinoceros beetle", "a red panda", "a capybara", "a flamingo",
+    "an octopus", "a pangolin", "a narwhal", "a meerkat", "a whale shark", "a toucan",
+    "a dragonfly", "a raccoon dog", "a lynx", "a koala", "a sea turtle", "a snow leopard",
+    "a poison dart frog", "a praying mantis", "a mole", "a bat", "a fox", "a swan",
+    "a crocodile", "a lobster", "a squirrel", "a camel", "a penguin", "a shark",
+    "a snail", "a beetle", "a ram", "a falcon", "a panda", "a crab", "a rabbit",
+    "a horse", "a goat", "a tiger", "an elephant", "a lion", "a zebra", "a crane",
+    "a frog", "a lizard", "a seal", "a dolphin", "a gorilla", "a buffalo", "a duck",
+    "a sheep", "a rooster", "a butterfly", "a spider", "a scorpion", "a starfish",
+    "a squid", "a walrus", "a hyena", "a boar", "a hummingbird", "an anteater"
+  ],
+  Actions: [
+    "running late", "whispering a secret", "balancing on a rope", "burning dinner",
+    "searching for lost keys", "taking a dramatic bow", "building a tiny bridge",
+    "falling asleep in class", "opening a mysterious box", "dodging a surprise rainstorm",
+    "posing for a portrait", "digging up a treasure", "escaping a maze", "throwing a parade",
+    "carrying too many bags", "signaling from far away", "trying not to laugh", "changing costumes",
+    "reading a confusing map", "making a grand apology", "fixing a broken bicycle",
+    "hiding a birthday present", "painting without looking", "landing on the moon"
+  ],
+  Objects: [
+    "a fountain pen", "a folding umbrella", "a plaster bust", "a magnifying glass",
+    "an hourglass", "a gramophone", "a pencil sharpener", "a bunch of keys",
+    "a carving knife", "a globe", "an old telephone", "a lantern", "a microscope",
+    "a metronome", "a chessboard", "a typewriter", "a compass", "a paint box",
+    "a broken clock", "a telescope", "a mirror", "a mask", "a suitcase", "a paper crane",
+    "a teapot", "a violin", "a camera", "a pair of scissors", "a treasure map",
+    "a light bulb", "a crown", "a ladder", "a vase", "a robot vacuum"
+  ],
+  Places: [
+    "a subway platform", "a used bookshop", "an art room", "a lighthouse", "a greenhouse",
+    "a movie theater", "a shrine path", "an aquarium", "a rooftop garden", "a night convenience store",
+    "a train station plaza", "an observatory", "a market", "an abandoned school", "a harbor",
+    "a library", "an art supply store", "a laboratory", "a circus tent", "a courtroom",
+    "a museum hallway", "a mountain cabin", "a desert oasis", "a crowded kitchen",
+    "a rainy bus stop", "a floating island", "a secret basement", "a winter festival"
+  ],
+  Art: [
+    "a cat in a woodblock print", "a bicycle in cubist style", "rain in impressionist style",
+    "a comic book finishing move", "breakfast as a movie poster", "a phone in an ancient mural",
+    "a sports day as abstract art", "pudding in a dramatic manga style", "a courtroom in a picture book",
+    "an alien in an advertisement poster", "a hot spring as a linocut", "a robot in ink wash style",
+    "heartbreak as a logo", "sushi in pop art style", "realistic magic", "a nap in stained glass",
+    "a meeting in clay animation style", "friendship as a warning sign", "being late as a museum poster",
+    "a phantom thief in encyclopedia style", "a landscape made of only triangles", "a portrait without a face"
+  ],
+  Ideas: [
+    "perspective", "gravity", "jealousy", "silence", "time travel", "deja vu", "coincidence",
+    "reflection", "loneliness", "victory", "confusion", "transparency", "memory", "growth",
+    "contradiction", "trend", "balance", "negative space", "tension", "rhythm", "nostalgia",
+    "luck", "camouflage", "echo", "patience", "speed", "symmetry", "a secret", "a promise"
+  ],
 };
 
-const modifiers = [
-  "", "を5秒で説明する絵", "を真上から見た絵", "を影だけで表す", "を怒らせた状態",
-  "が未来にある姿", "を小学生にも伝わるように", "を一筆書き風に", "を巨大化させる",
-  "を透明に見せる", "を古代文明風に", "が失敗した瞬間", "を静物画っぽく",
-  "をポスターとして描く", "を反対語と一緒に描く",
+const challenges = [
+  { add: 0, text: (s) => `Draw ${s}.` },
+  { add: 1, text: (s) => `Draw ${s} in motion.` },
+  { add: 1, text: (s) => `Draw ${s} from above.` },
+  { add: 2, text: (s) => `Draw ${s} using only simple shapes.` },
+  { add: 2, text: (s) => `Draw ${s} as if it is huge.` },
+  { add: 3, text: (s) => `Draw ${s} without using its most obvious shape.` },
+  { add: 4, text: (s) => `Draw ${s} as a poster that people can understand quickly.` },
+  { add: 5, text: (s) => `Draw ${s} as a clever visual metaphor.` },
 ];
 
-function scoreFor(index) {
-  const roll = (index * 37) % 100;
-  if (roll < 24) return 1;
-  if (roll < 46) return 2;
-  if (roll < 64) return 3;
-  if (roll < 78) return 4;
-  if (roll < 88) return 5;
-  if (roll < 94) return 6;
-  if (roll < 97) return 7;
-  if (roll < 99) return 8;
-  return index % 5 === 0 ? 10 : 9;
+function hashText(text) {
+  let hash = 0;
+  for (let i = 0; i < text.length; i += 1) {
+    hash = (hash * 31 + text.charCodeAt(i)) >>> 0;
+  }
+  return hash;
+}
+
+function baseScore(category, subject) {
+  const longWord = subject.length > 18 ? 1 : 0;
+  if (category === "Animals") return 1 + (hashText(subject) % 3) + longWord;
+  if (category === "Ideas") return 3 + (hashText(subject) % 3);
+  if (category === "Art") return 3 + (hashText(subject) % 2);
+  return 2 + (hashText(subject) % 3);
+}
+
+function scoreFor(category, subject, challenge, id) {
+  let score = baseScore(category, subject) + challenge.add;
+  if (id % 149 === 0) score += 2;
+  if (id % 97 === 0) score += 1;
+  return Math.max(1, Math.min(10, score));
 }
 
 function difficultyFor(score) {
-  if (score <= 2) return "導入";
-  if (score <= 4) return "普通";
-  if (score <= 6) return "難";
-  if (score <= 8) return "激ムズ";
-  return "伝説";
+  if (score <= 2) return "Easy";
+  if (score <= 4) return "Medium";
+  if (score <= 6) return "Hard";
+  if (score <= 8) return "Expert";
+  return "Legendary";
+}
+
+function photoQuery(category, subject, score) {
+  if (category === "Animals") return subject.replace(/^(a|an) /, "");
+  if (score >= 8) return `${subject.replace(/^(a|an) /, "")}, drawing reference`;
+  return "";
 }
 
 function defaultCards() {
   const cards = [];
   let id = 1;
   for (const category of categories) {
-    for (const word of baseWords[category]) {
-      for (const mod of modifiers) {
-        const score = scoreFor(id);
-        const hardMod = score >= 8 && mod === "" ? "を比喩だけで表す" : mod;
+    for (const subject of subjects[category]) {
+      for (const challenge of challenges) {
+        const score = scoreFor(category, subject, challenge, id);
+        const imageQuery = photoQuery(category, subject, score);
         cards.push({
           id: `c${id}`,
-          text: `${word}${hardMod}`,
+          text: challenge.text(subject),
           category,
           score,
           difficulty: difficultyFor(score),
+          imageQuery,
         });
         id += 1;
-        if (cards.length === 999) return cards;
       }
     }
   }
   return cards.slice(0, 999);
 }
 
-function makeTeams(count = 3) {
+function makeTeams(count = DEFAULT_SETTINGS.teamCount) {
   return colors.slice(0, count).map((color, index) => ({
     id: `t${index + 1}`,
-    name: `${color.name}チーム`,
+    name: `${color.name} Team`,
     color: color.value,
     second: color.second,
     score: 0,
@@ -88,15 +158,16 @@ function makeTeams(count = 3) {
 
 function freshState() {
   return {
+    schemaVersion: SETTINGS_VERSION,
     cards: defaultCards(),
-    teams: makeTeams(2),
-    settings: { teamCount: 2, limit: 20, seconds: 120, rounds: 0 },
+    teams: makeTeams(DEFAULT_SETTINGS.teamCount),
+    settings: { ...DEFAULT_SETTINGS },
     currentTeam: 0,
     round: 1,
     deck: [],
     drawn: [],
     running: false,
-    timeLeft: 120,
+    timeLeft: DEFAULT_SETTINGS.seconds,
     turnStarted: false,
     turnNumber: 1,
     currentCardId: null,
@@ -113,14 +184,24 @@ function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (saved?.cards?.length) {
+      const base = freshState();
+      const migratedSettings = saved.schemaVersion === SETTINGS_VERSION ? saved.settings : { ...DEFAULT_SETTINGS };
       return {
-        ...freshState(),
-        ...saved,
+        ...base,
+        cards: saved.schemaVersion === SETTINGS_VERSION ? saved.cards : base.cards,
+        teams: saved.schemaVersion === SETTINGS_VERSION ? saved.teams : makeTeams(DEFAULT_SETTINGS.teamCount),
+        settings: migratedSettings,
+        currentTeam: saved.schemaVersion === SETTINGS_VERSION ? saved.currentTeam || 0 : 0,
+        round: saved.schemaVersion === SETTINGS_VERSION ? saved.round || 1 : 1,
+        deck: saved.schemaVersion === SETTINGS_VERSION ? saved.deck || [] : [],
+        turnNumber: saved.schemaVersion === SETTINGS_VERSION ? saved.turnNumber || 1 : 1,
         running: false,
         turnStarted: false,
-        timeLeft: saved.settings?.seconds || 120,
+        timeLeft: migratedSettings.seconds || DEFAULT_SETTINGS.seconds,
         drawn: [],
         currentCardId: null,
+        ended: false,
+        schemaVersion: SETTINGS_VERSION,
       };
     }
   } catch {
@@ -131,6 +212,7 @@ function loadState() {
 
 function saveState() {
   const saved = {
+    schemaVersion: SETTINGS_VERSION,
     cards: state.cards,
     teams: state.teams,
     settings: state.settings,
@@ -158,11 +240,19 @@ function ensureDeck() {
 }
 
 function currentTeam() {
-  return state.teams[state.currentTeam];
+  return state.teams[state.currentTeam] || state.teams[0];
 }
 
 function cardById(id) {
   return state.cards.find((card) => card.id === id);
+}
+
+function cardNumber(card) {
+  const match = /^c(\d+)$/.exec(card.id);
+  if (match) return `No. ${match[1]}`;
+  const addedCards = state.cards.filter((item) => !/^c\d+$/.test(item.id));
+  const addedIndex = Math.max(0, addedCards.findIndex((item) => item.id === card.id));
+  return `No. A${addedIndex + 1} (added)`;
 }
 
 function formatTime(seconds) {
@@ -177,12 +267,31 @@ function setTheme() {
   document.documentElement.style.setProperty("--accent-2", team.second);
 }
 
+function imageUrl(card) {
+  if (!card?.imageQuery) return "";
+  const query = encodeURIComponent(card.imageQuery.toLowerCase().replace(/[^\w\s,-]/g, "").trim());
+  const lock = hashText(card.id + card.imageQuery) % 9999;
+  return `https://loremflickr.com/640/420/${query}?lock=${lock}`;
+}
+
+function renderPromptImage(card) {
+  const box = $("promptImage");
+  const url = imageUrl(card);
+  if (!url) {
+    box.hidden = true;
+    box.innerHTML = "";
+    return;
+  }
+  box.hidden = false;
+  box.innerHTML = `<img src="${escapeAttr(url)}" alt="Reference photo for ${escapeAttr(card.text)}" loading="lazy" onerror="this.parentElement.hidden=true" />`;
+}
+
 function render() {
   setTheme();
   $("currentTeam").textContent = currentTeam().name;
-  $("roundStatus").textContent = state.ended ? "終了" : state.settings.rounds ? `${state.round}/${state.settings.rounds}周` : `${state.round}周目`;
+  $("roundStatus").textContent = state.ended ? "Finished" : state.settings.rounds ? `Round ${state.round}/${state.settings.rounds}` : `Round ${state.round}`;
   $("timeLeft").textContent = formatTime(state.timeLeft);
-  $("timerHint").textContent = state.running ? "進行中" : state.turnStarted ? "一時停止/再開" : "タップで開始";
+  $("timerHint").textContent = state.running ? "Running" : state.turnStarted ? "Pause / resume" : "Tap to start";
   $("drawButton").disabled = !state.turnStarted || (!state.running && state.timeLeft === 0) || state.drawn.length >= state.settings.limit || state.ended;
   $("giveUpButton").disabled = !state.turnStarted || state.ended;
   $("nextButton").disabled = state.ended;
@@ -190,10 +299,11 @@ function render() {
   $("turnLimit").textContent = state.settings.limit;
 
   const current = cardById(state.currentCardId);
-  $("promptCategory").textContent = current ? current.category : state.turnStarted ? "カードを引いてください" : "タイマー開始後にカードを引けます";
-  $("promptText").textContent = current ? current.text : state.ended ? "ゲーム終了" : "準備中";
-  $("promptDifficulty").textContent = current ? current.difficulty : state.turnStarted ? "開始済み" : "未開始";
-  $("promptScore").textContent = current ? `${current.score}点` : "0点";
+  renderPromptImage(current);
+  $("promptCategory").textContent = current ? `${cardNumber(current)} / ${current.category}` : state.turnStarted ? "Draw a card." : "Start the timer, then draw cards.";
+  $("promptText").textContent = current ? current.text : state.ended ? "Game finished" : "Ready";
+  $("promptDifficulty").textContent = current ? current.difficulty : state.turnStarted ? "Turn started" : "Not started";
+  $("promptScore").textContent = current ? `${current.score} pts` : "0 pts";
 
   renderDrawn();
   renderScoreboard();
@@ -204,7 +314,7 @@ function render() {
 function renderDrawn() {
   const list = $("drawnList");
   if (!state.drawn.length) {
-    list.innerHTML = `<div class="empty">このターンのカードはまだありません</div>`;
+    list.innerHTML = `<div class="empty">No cards drawn this turn yet.</div>`;
     return;
   }
   list.innerHTML = state.drawn.map((entry) => {
@@ -214,10 +324,10 @@ function renderDrawn() {
       <div class="drawn-card ${entry.scored ? "scored" : ""}">
         <div>
           <p class="card-title">${escapeHtml(card.text)}</p>
-          <span class="card-info">${card.category} / ${card.difficulty} / ${card.score}点</span>
+          <span class="card-info">${cardNumber(card)} / ${card.category} / ${card.difficulty} / ${card.score} pts</span>
         </div>
         <button class="score-button ${entry.scored ? "on" : ""}" data-score="${entry.id}" type="button">
-          ${entry.scored ? "取消" : `+${card.score}`}
+          ${entry.scored ? "Undo" : `+${card.score}`}
         </button>
       </div>`;
   }).join("");
@@ -225,17 +335,17 @@ function renderDrawn() {
 
 function renderScoreboard() {
   const sorted = [...state.teams].sort((a, b) => b.score - a.score);
-  $("leaderTitle").textContent = sorted[0] ? `${sorted[0].name} ${sorted[0].score}点` : "";
+  $("leaderTitle").textContent = sorted[0] ? `${sorted[0].name} ${sorted[0].score} pts` : "";
   $("scoreboard").innerHTML = sorted.map((team, index) => `
     <div class="score-row" data-team="${team.id}">
       <i class="team-dot" style="background:${team.color}"></i>
       <div>
         <p class="card-title">${index + 1}. ${escapeHtml(team.name)}</p>
-        <span class="card-info">${team.log.length} 枚得点</span>
+        <span class="card-info">${team.log.length} scored cards</span>
       </div>
-      <button class="detail-button" data-detail="${team.id}" type="button">${team.score}点</button>
+      <button class="detail-button" data-detail="${team.id}" type="button">${team.score} pts</button>
       <div class="score-detail">
-        ${team.log.length ? team.log.slice().reverse().map((log) => `T${log.turn} / ${log.round}周目: ${escapeHtml(log.text)}（${log.score}点）`).join("<br>") : "得点履歴なし"}
+        ${team.log.length ? team.log.slice().reverse().map((log) => `Turn ${log.turn} / Round ${log.round}: ${escapeHtml(log.cardNo || "No. ?")} / ${escapeHtml(log.text)} (${log.score} pts)`).join("<br>") : "No scored cards yet."}
       </div>
     </div>
   `).join("");
@@ -257,7 +367,7 @@ function renderHost() {
 
   if (!$("newCardCategory").children.length) {
     $("newCardCategory").innerHTML = categories.map((cat) => `<option>${cat}</option>`).join("");
-    $("newCardScore").innerHTML = Array.from({ length: 10 }, (_, i) => `<option value="${i + 1}">${i + 1}点</option>`).join("");
+    $("newCardScore").innerHTML = Array.from({ length: 10 }, (_, i) => `<option value="${i + 1}">${i + 1} pts</option>`).join("");
     $("newCardScore").value = "3";
   }
 
@@ -269,11 +379,12 @@ function renderLibrary() {
   const cards = state.cards.filter((card) => !q || card.text.toLowerCase().includes(q) || card.category.toLowerCase().includes(q)).slice(0, 80);
   $("libraryList").innerHTML = cards.map((card) => `
     <div class="library-item">
+      <span class="card-number">${escapeHtml(cardNumber(card))}</span>
       <input data-card-text="${card.id}" value="${escapeAttr(card.text)}" />
       <select data-card-score="${card.id}">
         ${Array.from({ length: 10 }, (_, i) => `<option value="${i + 1}" ${card.score === i + 1 ? "selected" : ""}>${i + 1}</option>`).join("")}
       </select>
-      <button class="mini-button" data-delete-card="${card.id}" type="button">削除</button>
+      <button class="mini-button" data-delete-card="${card.id}" type="button">Delete</button>
     </div>
   `).join("");
 }
@@ -304,7 +415,6 @@ function startTimer() {
 function drawCard() {
   if (!state.turnStarted || state.drawn.length >= state.settings.limit || state.ended) return;
   ensureDeck();
-  if (!state.deck.length) ensureDeck();
   const id = state.deck.pop();
   state.currentCardId = id;
   state.drawn.push({ id, scored: false });
@@ -324,7 +434,7 @@ function toggleScore(id) {
   } else {
     entry.scored = true;
     team.score += card.score;
-    team.log.push({ cardId: id, text: card.text, score: card.score, turn: state.turnNumber, round: state.round });
+    team.log.push({ cardId: id, cardNo: cardNumber(card), text: card.text, score: card.score, turn: state.turnNumber, round: state.round });
   }
   render();
 }
@@ -387,16 +497,28 @@ function resetGame() {
   render();
 }
 
+function resetToDefaults() {
+  clearInterval(timer);
+  const cards = state.cards;
+  state = freshState();
+  state.cards = cards;
+  state.deck = [];
+  ensureDeck();
+  render();
+}
+
 function addCard() {
   const text = $("newCardText").value.trim();
   if (!text) return;
   const score = Number($("newCardScore").value);
+  const category = $("newCardCategory").value;
   state.cards.push({
     id: `u${Date.now()}`,
     text,
-    category: $("newCardCategory").value,
+    category,
     score,
     difficulty: difficultyFor(score),
+    imageQuery: category === "Animals" || score >= 8 ? text.replace(/^Draw /, "").replace(/[.]/g, "") : "",
   });
   $("newCardText").value = "";
   render();
@@ -413,7 +535,10 @@ function updateCard(id, patch) {
   const card = cardById(id);
   if (!card) return;
   Object.assign(card, patch);
-  if (patch.score) card.difficulty = difficultyFor(card.score);
+  if (patch.score) {
+    card.difficulty = difficultyFor(card.score);
+    card.imageQuery = card.category === "Animals" || card.score >= 8 ? card.text.replace(/^Draw /, "").replace(/[.]/g, "") : "";
+  }
   render();
 }
 
@@ -444,6 +569,7 @@ document.addEventListener("click", (event) => {
   if (target.id === "giveUpButton") giveUp();
   if (target.id === "applySettings") applySettings();
   if (target.id === "resetGame") resetGame();
+  if (target.id === "resetDefaults") resetToDefaults();
   if (target.id === "addCard") addCard();
   if (target.id === "themeButton") {
     state.currentTeam = (state.currentTeam + 1) % state.teams.length;
@@ -478,6 +604,7 @@ document.addEventListener("input", (event) => {
     const card = cardById(target.dataset.cardText);
     if (card) {
       card.text = target.value;
+      card.imageQuery = card.category === "Animals" || card.score >= 8 ? target.value.replace(/^Draw /, "").replace(/[.]/g, "") : "";
       saveState();
     }
   }

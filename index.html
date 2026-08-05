@@ -1,59 +1,60 @@
 <!doctype html>
-<html lang="ja">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#0e1325" />
-    <title>スマホ・ピクショナリー</title>
+    <title>Shared Phone Pictionary</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="app" id="app">
       <section class="hero">
         <div>
-          <p class="kicker">Pictionary deck</p>
-          <h1>スマホ・ピクショナリー</h1>
+          <p class="kicker">One shared phone</p>
+          <h1>Shared Phone Pictionary</h1>
         </div>
-        <button class="icon-button" id="themeButton" type="button" aria-label="色を切り替える">◎</button>
+        <button class="icon-button" id="themeButton" type="button" aria-label="Switch team color">◎</button>
       </section>
 
       <section class="turn-card" aria-live="polite">
         <div class="turn-top">
           <div>
-            <p class="label">現在のチーム</p>
-            <h2 id="currentTeam">赤チーム</h2>
+            <p class="label">Current team</p>
+            <h2 id="currentTeam">Red Team</h2>
           </div>
-          <div class="round-pill" id="roundStatus">∞</div>
+          <div class="round-pill" id="roundStatus">Round 1</div>
         </div>
 
         <div class="timer-row">
-          <button class="timer" id="timerButton" type="button" aria-label="タイマー開始">
+          <button class="timer" id="timerButton" type="button" aria-label="Start or pause timer">
             <span id="timeLeft">02:00</span>
-            <small id="timerHint">タップで開始</small>
+            <small id="timerHint">Tap to start</small>
           </button>
-          <button class="give-up" id="giveUpButton" type="button">ギブアップ</button>
+          <button class="give-up" id="giveUpButton" type="button">Give up</button>
         </div>
 
         <article class="prompt" id="promptPanel">
-          <p id="promptCategory">タイマー開始後にカードを引けます</p>
-          <h3 id="promptText">準備中</h3>
+          <div class="prompt-image" id="promptImage" hidden></div>
+          <p id="promptCategory">Start the timer, then draw cards.</p>
+          <h3 id="promptText">Ready</h3>
           <div class="prompt-meta">
-            <span id="promptDifficulty">未開始</span>
-            <strong id="promptScore">0点</strong>
+            <span id="promptDifficulty">Not started</span>
+            <strong id="promptScore">0 pts</strong>
           </div>
         </article>
 
-        <button class="primary" id="drawButton" type="button" disabled>カードを引く</button>
-        <button class="secondary" id="nextButton" type="button">次のチームへ</button>
+        <button class="primary" id="drawButton" type="button" disabled>Draw card</button>
+        <button class="secondary" id="nextButton" type="button">Next team</button>
       </section>
 
       <section class="panel">
         <div class="panel-head">
           <div>
-            <p class="label">このターンで引いたカード</p>
-            <h2><span id="turnCount">0</span>/<span id="turnLimit">8</span> 枚</h2>
+            <p class="label">Cards drawn this turn</p>
+            <h2><span id="turnCount">0</span>/<span id="turnLimit">20</span> cards</h2>
           </div>
-          <span class="subtle">得点したカードをタップ</span>
+          <span class="subtle">Tap scored cards</span>
         </div>
         <div class="drawn-list" id="drawnList"></div>
       </section>
@@ -61,63 +62,67 @@
       <section class="panel">
         <div class="panel-head">
           <div>
-            <p class="label">ランキング</p>
-            <h2 id="leaderTitle">赤チームが先攻</h2>
+            <p class="label">Scoreboard</p>
+            <h2 id="leaderTitle">Red Team starts</h2>
           </div>
         </div>
         <div class="scoreboard" id="scoreboard"></div>
       </section>
 
       <details class="host">
-        <summary>ホスト設定・カード編集</summary>
+        <summary>Host settings and card list</summary>
+        <div class="host-note">
+          Defaults now reset old saved settings on this phone. Custom card edits still save on this browser.
+        </div>
         <div class="host-grid">
-          <label>チーム数
-            <input id="teamCountInput" type="number" min="2" max="8" value="3" />
+          <label>Teams
+            <input id="teamCountInput" type="number" min="2" max="8" value="2" />
           </label>
-          <label>1ターンの上限
-            <input id="limitInput" type="number" min="1" max="30" value="8" />
+          <label>Cards per turn
+            <input id="limitInput" type="number" min="1" max="30" value="20" />
           </label>
-          <label>制限時間（秒）
+          <label>Seconds
             <input id="timeInput" type="number" min="15" max="600" value="120" />
           </label>
-          <label>ラウンド数
+          <label>Rounds
             <select id="roundInput">
-              <option value="0">無限</option>
-              <option value="1">1周</option>
-              <option value="2">2周</option>
-              <option value="3">3周</option>
-              <option value="5">5周</option>
+              <option value="0">Unlimited</option>
+              <option value="1">1 round</option>
+              <option value="2">2 rounds</option>
+              <option value="3">3 rounds</option>
+              <option value="5">5 rounds</option>
             </select>
           </label>
         </div>
         <div class="host-actions">
-          <button id="applySettings" type="button">設定を反映</button>
-          <button id="resetGame" type="button">ゲームをリセット</button>
+          <button id="applySettings" type="button">Apply settings</button>
+          <button id="resetGame" type="button">Reset game</button>
+          <button id="resetDefaults" type="button">Reset to default setup</button>
         </div>
 
         <div class="team-editor">
-          <p class="label">チーム名</p>
+          <p class="label">Team names</p>
           <div id="teamNameList"></div>
         </div>
 
         <div class="library">
           <div class="panel-head">
             <div>
-              <p class="label">カードリスト</p>
-              <h2><span id="libraryCount">999</span> 枚</h2>
+              <p class="label">Card library</p>
+              <h2><span id="libraryCount">999</span> cards</h2>
             </div>
           </div>
-          <input id="cardSearch" type="search" placeholder="カード検索" />
+          <input id="cardSearch" type="search" placeholder="Search cards" />
           <div class="card-form">
-            <input id="newCardText" type="text" placeholder="追加するお題" />
+            <input id="newCardText" type="text" placeholder="New prompt" />
             <select id="newCardCategory"></select>
             <select id="newCardScore"></select>
-            <button id="addCard" type="button">追加</button>
+            <button id="addCard" type="button">Add card</button>
           </div>
           <div class="library-list" id="libraryList"></div>
         </div>
       </details>
     </main>
-    <script src="app.js"></script>
+    <script src="app.js?v=20260805-english-cards"></script>
   </body>
 </html>
