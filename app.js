@@ -584,12 +584,13 @@ function render() {
   $("turnCount").textContent = state.drawn.length;
   $("turnLimit").textContent = state.settings.limit;
 
-  const current = cardById(state.currentCardId);
+  const paused = state.turnStarted && !state.running && !state.turnExpired && state.timeLeft > 0;
+  const current = paused ? null : cardById(state.currentCardId);
   renderPromptImage(current);
   $("promptPanel").classList.toggle("waiting", !current && !state.ended);
-  $("promptCategory").textContent = current ? `${cardNumber(current)} / ${current.category}` : state.ended ? "Game finished" : state.turnExpired ? "Time is up" : state.turnStarted ? "Now draw cards" : "Turn setup";
-  $("promptText").textContent = current ? current.text : state.ended ? "Game finished" : state.turnExpired ? "Mark the cards your team guessed, then tap Next team." : state.turnStarted ? "Draw a card when your team is ready." : "Start the timer first.";
-  $("promptDifficulty").textContent = current ? current.difficulty : state.turnExpired ? "Scoring step" : state.turnStarted ? "Timer is running" : "No card yet";
+  $("promptCategory").textContent = current ? `${cardNumber(current)} / ${current.category}` : state.ended ? "Game finished" : state.turnExpired ? "Time is up" : paused ? "Timer paused" : state.turnStarted ? "Now draw cards" : "Turn setup";
+  $("promptText").textContent = current ? current.text : state.ended ? "Game finished" : state.turnExpired ? "Mark the cards your team guessed, then tap Next team." : paused ? "Resume the timer to show the current card again." : state.turnStarted ? "Draw a card when your team is ready." : "Start the timer first.";
+  $("promptDifficulty").textContent = current ? current.difficulty : state.turnExpired ? "Scoring step" : paused ? "Card hidden" : state.turnStarted ? "Timer is running" : "No card yet";
   $("promptScore").textContent = current ? `${current.score} pts` : "";
 
   renderDrawn();
