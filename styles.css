@@ -167,8 +167,14 @@ h2 {
 
 .prompt-image {
   width: 100%;
-  aspect-ratio: 16 / 10;
   margin-bottom: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  gap: 10px;
+}
+
+.prompt-image figure {
+  margin: 0;
   overflow: hidden;
   border-radius: 16px;
   background: rgba(0, 0, 0, 0.18);
@@ -178,8 +184,15 @@ h2 {
 .prompt-image img {
   display: block;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 16 / 10;
   object-fit: cover;
+}
+
+.prompt-image figcaption {
+  padding: 7px 9px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .prompt p {

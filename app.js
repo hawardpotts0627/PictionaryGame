@@ -1,5 +1,5 @@
 const STORAGE_KEY = "phone-pictionary-v2";
-const SETTINGS_VERSION = 2;
+const SETTINGS_VERSION = 3;
 const DEFAULT_SETTINGS = { teamCount: 2, limit: 20, seconds: 120, rounds: 0 };
 
 const colors = [
@@ -74,16 +74,38 @@ const subjects = {
   ],
 };
 
+const animalActions = [
+  { add: 0, text: "sleeping" },
+  { add: 1, text: "jumping over a fence" },
+  { add: 1, text: "chasing a ball" },
+  { add: 1, text: "hiding behind a tree" },
+  { add: 2, text: "wearing a tiny crown" },
+  { add: 2, text: "balancing on a rock", hint: "balancing pose" },
+  { add: 3, text: "carrying an oversized backpack" },
+  { add: 3, text: "looking at its reflection", hint: "reflection in mirror" },
+  { add: 4, text: "camouflaged in leaves", hint: "camouflage in leaves" },
+  { add: 5, text: "leading a parade", hint: "parade leader" },
+];
+
 const challenges = [
   { add: 0, text: (s) => `Draw ${s}.` },
   { add: 1, text: (s) => `Draw ${s} in motion.` },
   { add: 1, text: (s) => `Draw ${s} from above.` },
-  { add: 2, text: (s) => `Draw ${s} using only simple shapes.` },
+  { add: 2, text: (s) => `Draw ${s} during a storm.` },
   { add: 2, text: (s) => `Draw ${s} as if it is huge.` },
   { add: 3, text: (s) => `Draw ${s} without using its most obvious shape.` },
   { add: 4, text: (s) => `Draw ${s} as a poster that people can understand quickly.` },
   { add: 5, text: (s) => `Draw ${s} as a clever visual metaphor.` },
 ];
+
+const cardQuotas = {
+  Animals: 430,
+  Actions: 140,
+  Objects: 140,
+  Places: 105,
+  Art: 105,
+  Ideas: 79,
+};
 
 function hashText(text) {
   let hash = 0;
@@ -116,33 +138,46 @@ function difficultyFor(score) {
   return "Legendary";
 }
 
-function photoQuery(category, subject, score) {
-  if (category === "Animals") return subject.replace(/^(a|an) /, "");
-  if (score >= 8) return `${subject.replace(/^(a|an) /, "")}, drawing reference`;
-  return "";
+function imageHintsFor(category, subject, score, actionHint = "") {
+  const cleanSubject = subject.replace(/^(a|an) /, "");
+  const hints = [];
+  if (category === "Animals") {
+    hints.push({ label: "Animal", query: `${cleanSubject} animal` });
+    if (actionHint && score >= 5) hints.push({ label: "Action", query: actionHint });
+  } else if (score >= 8 && ["Objects", "Places"].includes(category)) {
+    hints.push({ label: category.slice(0, -1), query: cleanSubject });
+  }
+  return hints;
 }
 
 function defaultCards() {
-  const cards = [];
+  const byCategory = {};
   let id = 1;
   for (const category of categories) {
+    byCategory[category] = [];
     for (const subject of subjects[category]) {
-      for (const challenge of challenges) {
+      const challengeSet = category === "Animals"
+        ? animalActions.map((action) => ({
+          add: action.add,
+          actionHint: action.hint || "",
+          text: (animal) => `Draw ${animal} ${action.text}.`,
+        }))
+        : challenges;
+      for (const challenge of challengeSet) {
         const score = scoreFor(category, subject, challenge, id);
-        const imageQuery = photoQuery(category, subject, score);
-        cards.push({
+        byCategory[category].push({
           id: `c${id}`,
           text: challenge.text(subject),
           category,
           score,
           difficulty: difficultyFor(score),
-          imageQuery,
+          imageHints: imageHintsFor(category, subject, score, challenge.actionHint),
         });
         id += 1;
       }
     }
   }
-  return cards.slice(0, 999);
+  return categories.flatMap((category) => byCategory[category].slice(0, cardQuotas[category])).slice(0, 999);
 }
 
 function makeTeams(count = DEFAULT_SETTINGS.teamCount) {
@@ -185,10 +220,11 @@ function loadState() {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (saved?.cards?.length) {
       const base = freshState();
+      const addedCards = (saved.cards || []).filter((card) => !/^c\d+$/.test(card.id));
       const migratedSettings = saved.schemaVersion === SETTINGS_VERSION ? saved.settings : { ...DEFAULT_SETTINGS };
       return {
         ...base,
-        cards: saved.schemaVersion === SETTINGS_VERSION ? saved.cards : base.cards,
+        cards: saved.schemaVersion === SETTINGS_VERSION ? saved.cards : [...base.cards, ...addedCards],
         teams: saved.schemaVersion === SETTINGS_VERSION ? saved.teams : makeTeams(DEFAULT_SETTINGS.teamCount),
         settings: migratedSettings,
         currentTeam: saved.schemaVersion === SETTINGS_VERSION ? saved.currentTeam || 0 : 0,
@@ -267,29 +303,84 @@ function setTheme() {
   document.documentElement.style.setProperty("--accent-2", team.second);
 }
 
-function imageUrl(card) {
-  if (!card?.imageQuery) return "";
-  const query = encodeURIComponent(card.imageQuery.toLowerCase().replace(/[^\w\s,-]/g, "").trim());
-  const lock = hashText(card.id + card.imageQuery) % 9999;
-  return `https://loremflickr.com/640/420/${query}?lock=${lock}`;
+let imageRequestId = 0;
+const imageCache = new Map();
+
+function cardImageHints(card) {
+  if (!card) return [];
+  if (Array.isArray(card.imageHints)) return card.imageHints.slice(0, 2);
+  if (card.imageQuery) return [{ label: "Reference", query: card.imageQuery }];
+  return [];
 }
 
-function renderPromptImage(card) {
+async function searchCommonsImage(query) {
+  const normalized = query.toLowerCase().replace(/[^\w\s-]/g, " ").replace(/\s+/g, " ").trim();
+  if (!normalized) return "";
+  if (imageCache.has(normalized)) return imageCache.get(normalized);
+  const url = "https://commons.wikimedia.org/w/api.php"
+    + "?action=query&generator=search&gsrnamespace=6&gsrlimit=6"
+    + `&gsrsearch=${encodeURIComponent(normalized)}`
+    + "&prop=imageinfo&iiprop=url|mime&iiurlwidth=420&format=json&origin=*";
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    const pages = Object.values(data.query?.pages || {});
+    const image = pages
+      .map((page) => page.imageinfo?.[0])
+      .find((info) => info?.thumburl && /^image\/(jpeg|png|webp)$/i.test(info.mime || ""));
+    const result = image?.thumburl || "";
+    imageCache.set(normalized, result);
+    return result;
+  } catch {
+    imageCache.set(normalized, "");
+    return "";
+  }
+}
+
+function loadImage(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(url);
+    img.onerror = () => resolve("");
+    img.src = url;
+  });
+}
+
+async function renderPromptImage(card) {
   const box = $("promptImage");
-  const url = imageUrl(card);
-  if (!url) {
+  const requestId = ++imageRequestId;
+  const hints = cardImageHints(card);
+  box.hidden = true;
+  box.innerHTML = "";
+  if (!hints.length) {
+    return;
+  }
+  const loaded = [];
+  for (const hint of hints) {
+    const url = await searchCommonsImage(hint.query);
+    if (requestId !== imageRequestId) return;
+    const safeUrl = url ? await loadImage(url) : "";
+    if (requestId !== imageRequestId) return;
+    if (safeUrl) loaded.push({ ...hint, url: safeUrl });
+  }
+  if (!loaded.length) {
     box.hidden = true;
     box.innerHTML = "";
     return;
   }
   box.hidden = false;
-  box.innerHTML = `<img src="${escapeAttr(url)}" alt="Reference photo for ${escapeAttr(card.text)}" loading="lazy" onerror="this.parentElement.hidden=true" />`;
+  box.innerHTML = loaded.map((hint) => `
+    <figure>
+      <img src="${escapeAttr(hint.url)}" alt="${escapeAttr(hint.label)} reference image" loading="lazy" />
+      <figcaption>${escapeHtml(hint.label)}</figcaption>
+    </figure>
+  `).join("");
 }
 
 function render() {
   setTheme();
   $("currentTeam").textContent = currentTeam().name;
-  $("roundStatus").textContent = state.ended ? "Finished" : state.settings.rounds ? `Round ${state.round}/${state.settings.rounds}` : `Round ${state.round} / ∞`;
+  $("roundStatus").textContent = state.ended ? "Finished" : state.settings.rounds ? `Round ${state.round}/${state.settings.rounds}` : `Round ${state.round} / \u221e`;
   $("timeLeft").textContent = formatTime(state.timeLeft);
   $("timerHint").textContent = state.running ? "Running" : state.turnStarted ? "Pause / resume" : "Tap to start";
   $("drawButton").disabled = !state.turnStarted || (!state.running && state.timeLeft === 0) || state.drawn.length >= state.settings.limit || state.ended;
@@ -518,7 +609,9 @@ function addCard() {
     category,
     score,
     difficulty: difficultyFor(score),
-    imageQuery: category === "Animals" || score >= 8 ? text.replace(/^Draw /, "").replace(/[.]/g, "") : "",
+    imageHints: category === "Animals" || score >= 8
+      ? [{ label: "Reference", query: text.replace(/^Draw /, "").replace(/[.]/g, "") }]
+      : [],
   });
   $("newCardText").value = "";
   render();
@@ -537,7 +630,9 @@ function updateCard(id, patch) {
   Object.assign(card, patch);
   if (patch.score) {
     card.difficulty = difficultyFor(card.score);
-    card.imageQuery = card.category === "Animals" || card.score >= 8 ? card.text.replace(/^Draw /, "").replace(/[.]/g, "") : "";
+    card.imageHints = card.category === "Animals" || card.score >= 8
+      ? [{ label: "Reference", query: card.text.replace(/^Draw /, "").replace(/[.]/g, "") }]
+      : [];
   }
   render();
 }
@@ -604,7 +699,9 @@ document.addEventListener("input", (event) => {
     const card = cardById(target.dataset.cardText);
     if (card) {
       card.text = target.value;
-      card.imageQuery = card.category === "Animals" || card.score >= 8 ? target.value.replace(/^Draw /, "").replace(/[.]/g, "") : "";
+      card.imageHints = card.category === "Animals" || card.score >= 8
+        ? [{ label: "Reference", query: target.value.replace(/^Draw /, "").replace(/[.]/g, "") }]
+        : [];
       saveState();
     }
   }
