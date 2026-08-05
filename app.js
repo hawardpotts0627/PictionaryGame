@@ -380,6 +380,7 @@ function freshState() {
     running: false,
     timeLeft: DEFAULT_SETTINGS.seconds,
     turnStarted: false,
+    turnExpired: false,
     turnNumber: 1,
     currentCardId: null,
     ended: false,
@@ -409,6 +410,7 @@ function loadState() {
         turnNumber: saved.schemaVersion === SETTINGS_VERSION ? saved.turnNumber || 1 : 1,
         running: false,
         turnStarted: false,
+        turnExpired: false,
         timeLeft: migratedSettings.seconds || DEFAULT_SETTINGS.seconds,
         drawn: [],
         currentCardId: null,
@@ -574,9 +576,10 @@ function render() {
   $("currentTeam").textContent = currentTeam().name;
   $("roundStatus").textContent = state.ended ? "Finished" : state.settings.rounds ? `Round ${state.round}/${state.settings.rounds}` : `Round ${state.round} / \u221e`;
   $("timeLeft").textContent = formatTime(state.timeLeft);
-  $("timerHint").textContent = state.running ? "Running" : state.turnStarted ? "Pause / resume" : "Tap to start";
-  $("drawButton").disabled = !state.turnStarted || (!state.running && state.timeLeft === 0) || state.drawn.length >= state.settings.limit || state.ended;
-  $("giveUpButton").disabled = !state.turnStarted || state.ended;
+  $("timerHint").textContent = state.turnExpired ? "Score cards below" : state.running ? "Running" : state.turnStarted ? "Pause / resume" : "Tap to start";
+  $("timerButton").disabled = state.turnExpired || state.ended;
+  $("drawButton").disabled = !state.turnStarted || state.turnExpired || (!state.running && state.timeLeft === 0) || state.drawn.length >= state.settings.limit || state.ended;
+  $("giveUpButton").disabled = !state.turnStarted || state.turnExpired || state.ended;
   $("nextButton").disabled = state.ended;
   $("turnCount").textContent = state.drawn.length;
   $("turnLimit").textContent = state.settings.limit;
@@ -584,9 +587,9 @@ function render() {
   const current = cardById(state.currentCardId);
   renderPromptImage(current);
   $("promptPanel").classList.toggle("waiting", !current && !state.ended);
-  $("promptCategory").textContent = current ? `${cardNumber(current)} / ${current.category}` : state.turnStarted ? "Now draw cards" : "Turn setup";
-  $("promptText").textContent = current ? current.text : state.ended ? "Game finished" : state.turnStarted ? "Draw a card when your team is ready." : "Start the timer first.";
-  $("promptDifficulty").textContent = current ? current.difficulty : state.turnStarted ? "Timer is running" : "No card yet";
+  $("promptCategory").textContent = current ? `${cardNumber(current)} / ${current.category}` : state.ended ? "Game finished" : state.turnExpired ? "Time is up" : state.turnStarted ? "Now draw cards" : "Turn setup";
+  $("promptText").textContent = current ? current.text : state.ended ? "Game finished" : state.turnExpired ? "Mark the cards your team guessed, then tap Next team." : state.turnStarted ? "Draw a card when your team is ready." : "Start the timer first.";
+  $("promptDifficulty").textContent = current ? current.difficulty : state.turnExpired ? "Scoring step" : state.turnStarted ? "Timer is running" : "No card yet";
   $("promptScore").textContent = current ? `${current.score} pts` : "";
 
   renderDrawn();
@@ -674,7 +677,7 @@ function renderLibrary() {
 }
 
 function startTimer() {
-  if (state.ended) return;
+  if (state.ended || state.turnExpired) return;
   state.turnStarted = true;
   if (state.timeLeft <= 0) state.timeLeft = state.settings.seconds;
   state.running = !state.running;
@@ -686,8 +689,9 @@ function startTimer() {
         state.timeLeft = 0;
         clearInterval(timer);
         state.running = false;
+        state.turnExpired = true;
+        state.currentCardId = null;
         render();
-        setTimeout(nextTurn, 650);
         return;
       }
       render();
@@ -728,6 +732,7 @@ function nextTurn() {
   clearInterval(timer);
   state.running = false;
   state.turnStarted = false;
+  state.turnExpired = false;
   state.timeLeft = state.settings.seconds;
   state.drawn = [];
   state.currentCardId = null;
@@ -746,12 +751,13 @@ function nextTurn() {
 }
 
 function giveUp() {
-  if (!state.turnStarted || state.ended) return;
+  if (!state.turnStarted || state.turnExpired || state.ended) return;
   clearInterval(timer);
   state.running = false;
   state.timeLeft = 0;
+  state.turnExpired = true;
+  state.currentCardId = null;
   render();
-  setTimeout(nextTurn, 550);
 }
 
 function applySettings() {
@@ -865,6 +871,7 @@ document.addEventListener("click", (event) => {
     state.drawn = [];
     state.currentCardId = null;
     state.turnStarted = false;
+    state.turnExpired = false;
     state.running = false;
     state.timeLeft = state.settings.seconds;
     clearInterval(timer);
