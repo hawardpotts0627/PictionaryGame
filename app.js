@@ -1,5 +1,5 @@
 const STORAGE_KEY = "phone-pictionary-v2";
-const SETTINGS_VERSION = 3;
+const SETTINGS_VERSION = 7;
 const DEFAULT_SETTINGS = { teamCount: 2, limit: 20, seconds: 120, rounds: 0 };
 
 const colors = [
@@ -13,7 +13,7 @@ const colors = [
   { name: "White", value: "#e5e7eb", second: "#94a3b8" },
 ];
 
-const categories = ["Animals", "Actions", "Objects", "Places", "Art", "Ideas"];
+const categories = ["Animals", "People", "Objects", "Places", "Countries", "Ideas"];
 
 const subjects = {
   Animals: [
@@ -31,14 +31,13 @@ const subjects = {
     "a sheep", "a rooster", "a butterfly", "a spider", "a scorpion", "a starfish",
     "a squid", "a walrus", "a hyena", "a boar", "a hummingbird", "an anteater"
   ],
-  Actions: [
-    "running late", "whispering a secret", "balancing on a rope", "burning dinner",
-    "searching for lost keys", "taking a dramatic bow", "building a tiny bridge",
-    "falling asleep in class", "opening a mysterious box", "dodging a surprise rainstorm",
-    "posing for a portrait", "digging up a treasure", "escaping a maze", "throwing a parade",
-    "carrying too many bags", "signaling from far away", "trying not to laugh", "changing costumes",
-    "reading a confusing map", "making a grand apology", "fixing a broken bicycle",
-    "hiding a birthday present", "painting without looking", "landing on the moon"
+  People: [
+    "a chef", "a detective", "a teacher", "a musician", "a firefighter", "an astronaut",
+    "a librarian", "a magician", "a gardener", "a photographer", "a scientist", "a sailor",
+    "a doctor", "a pilot", "a judge", "a dancer", "a delivery driver", "a museum guard",
+    "a baker", "a carpenter", "a reporter", "a mountain climber", "a barber", "a tailor",
+    "a street performer", "a tour guide", "a game designer", "a weather forecaster",
+    "a train conductor", "a zookeeper", "a fortune teller", "a race car driver"
   ],
   Objects: [
     "a fountain pen", "a folding umbrella", "a plaster bust", "a magnifying glass",
@@ -57,14 +56,11 @@ const subjects = {
     "a museum hallway", "a mountain cabin", "a desert oasis", "a crowded kitchen",
     "a rainy bus stop", "a floating island", "a secret basement", "a winter festival"
   ],
-  Art: [
-    "a cat in a woodblock print", "a bicycle in cubist style", "rain in impressionist style",
-    "a comic book finishing move", "breakfast as a movie poster", "a phone in an ancient mural",
-    "a sports day as abstract art", "pudding in a dramatic manga style", "a courtroom in a picture book",
-    "an alien in an advertisement poster", "a hot spring as a linocut", "a robot in ink wash style",
-    "heartbreak as a logo", "sushi in pop art style", "realistic magic", "a nap in stained glass",
-    "a meeting in clay animation style", "friendship as a warning sign", "being late as a museum poster",
-    "a phantom thief in encyclopedia style", "a landscape made of only triangles", "a portrait without a face"
+  Countries: [
+    "Japan", "France", "Brazil", "Egypt", "India", "Canada", "Mexico", "Italy", "Kenya",
+    "Australia", "Norway", "Thailand", "Greece", "Peru", "Morocco", "Iceland", "Turkey",
+    "South Korea", "Spain", "Germany", "Vietnam", "New Zealand", "Argentina", "Finland",
+    "Indonesia", "South Africa", "Chile", "Portugal", "Switzerland", "Mongolia"
   ],
   Ideas: [
     "perspective", "gravity", "jealousy", "silence", "time travel", "deja vu", "coincidence",
@@ -79,33 +75,129 @@ const animalActions = [
   { add: 1, text: "jumping over a fence" },
   { add: 1, text: "chasing a ball" },
   { add: 1, text: "hiding behind a tree" },
+  { add: 1, text: "guarding a doorway" },
+  { add: 1, text: "stealing a snack" },
   { add: 2, text: "wearing a tiny crown" },
-  { add: 2, text: "balancing on a rock", hint: "balancing pose" },
+  { add: 2, text: "balancing on a rock" },
+  { add: 2, text: "riding a skateboard" },
+  { add: 2, text: "checking a mailbox" },
   { add: 3, text: "carrying an oversized backpack" },
-  { add: 3, text: "looking at its reflection", hint: "reflection in mirror" },
-  { add: 4, text: "camouflaged in leaves", hint: "camouflage in leaves" },
-  { add: 5, text: "leading a parade", hint: "parade leader" },
+  { add: 3, text: "looking at its reflection" },
+  { add: 3, text: "stealing a sandwich" },
+  { add: 3, text: "waiting at a bus stop" },
+  { add: 3, text: "wearing rain boots" },
+  { add: 4, text: "camouflaged in leaves" },
+  { add: 4, text: "hosting a tiny tea party" },
+  { add: 4, text: "driving a toy car" },
+  { add: 4, text: "solving a puzzle" },
+  { add: 4, text: "performing a magic trick" },
+  { add: 5, text: "leading a parade" },
+  { add: 5, text: "conducting an orchestra" },
+  { add: 5, text: "serving as a museum guide" },
+  { add: 5, text: "building a blanket fort" },
+  { add: 6, text: "discovering a hidden planet" },
+  { add: 6, text: "guarding a treasure chest" },
+  { add: 6, text: "arguing with a tiny robot" },
+  { add: 6, text: "teaching a class" },
+  { add: 7, text: "trying to look innocent after causing trouble" },
+  { add: 7, text: "announcing breaking news on television" },
+  { add: 8, text: "running a very serious courtroom" },
 ];
 
-const challenges = [
+const objectChallenges = [
   { add: 0, text: (s) => `Draw ${s}.` },
-  { add: 1, text: (s) => `Draw ${s} in motion.` },
-  { add: 1, text: (s) => `Draw ${s} from above.` },
+  { add: 1, text: (s) => `Draw someone finding ${s}.` },
+  { add: 1, text: (s) => `Draw ${s} under a table.` },
   { add: 2, text: (s) => `Draw ${s} during a storm.` },
-  { add: 2, text: (s) => `Draw ${s} as if it is huge.` },
-  { add: 3, text: (s) => `Draw ${s} without using its most obvious shape.` },
-  { add: 4, text: (s) => `Draw ${s} as a poster that people can understand quickly.` },
-  { add: 5, text: (s) => `Draw ${s} as a clever visual metaphor.` },
+  { add: 2, text: (s) => `Draw ${s} being used the wrong way.` },
+  { add: 2, text: (s) => `Draw ${s} hidden in a messy room.` },
+  { add: 3, text: (s) => `Draw ${s} being repaired in a hurry.` },
+  { add: 3, text: (s) => `Draw ${s} causing a small accident.` },
+  { add: 3, text: (s) => `Draw ${s} as the only clue in a mystery.` },
+  { add: 4, text: (s) => `Draw ${s} floating down a river.` },
+  { add: 4, text: (s) => `Draw ${s} being protected like a treasure.` },
+  { add: 4, text: (s) => `Draw ${s} arriving in the mail.` },
+  { add: 5, text: (s) => `Draw ${s} becoming the center of attention.` },
+  { add: 5, text: (s) => `Draw ${s} in a museum display case.` },
+  { add: 6, text: (s) => `Draw ${s} starting a chain reaction.` },
+  { add: 7, text: (s) => `Draw ${s} being mistaken for something dangerous.` },
 ];
 
-const cardQuotas = {
-  Animals: 430,
-  Actions: 140,
-  Objects: 140,
-  Places: 105,
-  Art: 105,
-  Ideas: 79,
-};
+const placeChallenges = [
+  { add: 0, text: (s) => `Draw ${s}.` },
+  { add: 1, text: (s) => `Draw a lost tourist at ${s}.` },
+  { add: 1, text: (s) => `Draw ${s} during heavy rain.` },
+  { add: 2, text: (s) => `Draw a hidden door at ${s}.` },
+  { add: 2, text: (s) => `Draw ${s} at midnight.` },
+  { add: 2, text: (s) => `Draw a long line of people at ${s}.` },
+  { add: 3, text: (s) => `Draw ${s} after everyone has gone home.` },
+  { add: 3, text: (s) => `Draw ${s} during a power outage.` },
+  { add: 3, text: (s) => `Draw a surprise performance at ${s}.` },
+  { add: 4, text: (s) => `Draw ${s} being flooded with balloons.` },
+  { add: 4, text: (s) => `Draw ${s} with one object completely out of place.` },
+  { add: 5, text: (s) => `Draw ${s} being used for the wrong purpose.` },
+  { add: 5, text: (s) => `Draw ${s} during a very awkward silence.` },
+  { add: 6, text: (s) => `Draw ${s} becoming a crime scene.` },
+  { add: 7, text: (s) => `Draw ${s} turning into a stage for an emergency speech.` },
+];
+
+const peopleActions = [
+  { add: 0, text: "running late for an appointment" },
+  { add: 1, text: "whispering a secret" },
+  { add: 1, text: "balancing on a rope" },
+  { add: 1, text: "searching for lost keys" },
+  { add: 1, text: "trying to carry a huge cake" },
+  { add: 1, text: "waiting for an important phone call" },
+  { add: 2, text: "opening a mysterious box" },
+  { add: 2, text: "dodging a sudden rainstorm" },
+  { add: 2, text: "carrying too many bags" },
+  { add: 2, text: "getting locked out" },
+  { add: 2, text: "explaining a plan on a whiteboard" },
+  { add: 3, text: "trying not to laugh" },
+  { add: 3, text: "reading a confusing map" },
+  { add: 3, text: "fixing a broken bicycle" },
+  { add: 3, text: "chasing a runaway hat" },
+  { add: 3, text: "protecting a tiny plant" },
+  { add: 4, text: "hiding a birthday present" },
+  { add: 4, text: "landing on the moon by mistake" },
+  { add: 4, text: "pretending to understand a strange machine" },
+  { add: 4, text: "leading a tour in the wrong direction" },
+  { add: 5, text: "arguing with a talking mirror" },
+  { add: 5, text: "escaping from a maze" },
+  { add: 5, text: "trying to impress a very bored audience" },
+  { add: 5, text: "making peace between two angry statues" },
+  { add: 6, text: "negotiating with a dragon" },
+  { add: 7, text: "pretending everything is fine during a disaster" },
+  { add: 7, text: "being interviewed by aliens" },
+  { add: 8, text: "discovering that gravity stopped working" },
+];
+
+const countryChallenges = [
+  { add: 2, text: (s) => `Draw ${s} using famous food, landmarks, or clothing.` },
+  { add: 3, text: (s) => `Draw a traveler arriving in ${s}.` },
+  { add: 4, text: (s) => `Draw a festival in ${s}.` },
+  { add: 5, text: (s) => `Draw ${s} as a crowded souvenir table.` },
+  { add: 5, text: (s) => `Draw a sports fan visiting ${s}.` },
+  { add: 6, text: (s) => `Draw a postcard from ${s} with three clues.` },
+  { add: 6, text: (s) => `Draw a school trip to ${s}.` },
+  { add: 7, text: (s) => `Draw a weather report from ${s}.` },
+  { add: 8, text: (s) => `Draw someone packing a suitcase for ${s}.` },
+];
+
+const ideaChallenges = [
+  { add: 2, text: (s) => `Draw ${s}.` },
+  { add: 2, text: (s) => `Draw a person experiencing ${s}.` },
+  { add: 3, text: (s) => `Draw a scene that clearly shows ${s}.` },
+  { add: 3, text: (s) => `Draw ${s} in a classroom.` },
+  { add: 4, text: (s) => `Draw someone suddenly understanding ${s}.` },
+  { add: 4, text: (s) => `Draw ${s} as a problem someone must solve.` },
+  { add: 5, text: (s) => `Draw ${s} changing a normal day.` },
+  { add: 5, text: (s) => `Draw ${s} in a crowded room.` },
+  { add: 6, text: (s) => `Draw ${s} causing a misunderstanding.` },
+  { add: 6, text: (s) => `Draw a group of people reacting to ${s}.` },
+  { add: 7, text: (s) => `Draw ${s} spreading through a crowd.` },
+  { add: 8, text: (s) => `Draw ${s} as the twist ending of a story.` },
+];
 
 function hashText(text) {
   let hash = 0;
@@ -118,8 +210,9 @@ function hashText(text) {
 function baseScore(category, subject) {
   const longWord = subject.length > 18 ? 1 : 0;
   if (category === "Animals") return 1 + (hashText(subject) % 3) + longWord;
+  if (category === "People") return 2 + (hashText(subject) % 3) + longWord;
+  if (category === "Countries") return 3 + (hashText(subject) % 3);
   if (category === "Ideas") return 3 + (hashText(subject) % 3);
-  if (category === "Art") return 3 + (hashText(subject) % 2);
   return 2 + (hashText(subject) % 3);
 }
 
@@ -138,16 +231,31 @@ function difficultyFor(score) {
   return "Legendary";
 }
 
-function imageHintsFor(category, subject, score, actionHint = "") {
+const referenceSubjects = new Set([
+  "chameleon", "jellyfish", "armadillo", "seahorse", "peacock", "hermit crab", "platypus",
+  "hedgehog", "sloth", "manta ray", "iguana", "pelican", "salamander", "coelacanth",
+  "rhinoceros beetle", "red panda", "capybara", "pangolin", "narwhal", "meerkat",
+  "whale shark", "toucan", "dragonfly", "raccoon dog", "lynx", "snow leopard",
+  "poison dart frog", "praying mantis", "hummingbird", "anteater", "gramophone",
+  "plaster bust", "metronome", "typewriter", "compass", "observatory", "lighthouse",
+  "greenhouse", "courtroom", "harbor", "aquarium"
+]);
+
+function imageHintsFor(category, subject, score) {
   const cleanSubject = subject.replace(/^(a|an) /, "");
   const hints = [];
-  if (category === "Animals") {
-    hints.push({ label: "Animal", query: `${cleanSubject} animal` });
-    if (actionHint && score >= 5) hints.push({ label: "Action", query: actionHint });
-  } else if (score >= 8 && ["Objects", "Places"].includes(category)) {
-    hints.push({ label: category.slice(0, -1), query: cleanSubject });
+  if (category === "Animals" && referenceSubjects.has(cleanSubject)) {
+    hints.push({ label: "Animal", title: titleCase(cleanSubject) });
+  } else if (category === "Countries") {
+    hints.push({ label: "Country", title: subject });
+  } else if (score >= 8 && ["Objects", "Places"].includes(category) && referenceSubjects.has(cleanSubject)) {
+    hints.push({ label: category.slice(0, -1), title: titleCase(cleanSubject) });
   }
   return hints;
+}
+
+function titleCase(text) {
+  return text.split(" ").map((word) => word ? word[0].toUpperCase() + word.slice(1) : word).join(" ");
 }
 
 function defaultCards() {
@@ -159,10 +267,20 @@ function defaultCards() {
       const challengeSet = category === "Animals"
         ? animalActions.map((action) => ({
           add: action.add,
-          actionHint: action.hint || "",
           text: (animal) => `Draw ${animal} ${action.text}.`,
         }))
-        : challenges;
+        : category === "People"
+          ? peopleActions.map((action) => ({
+            add: action.add,
+            text: (person) => `Draw ${person} ${action.text}.`,
+          }))
+          : category === "Countries"
+            ? countryChallenges
+            : category === "Places"
+              ? placeChallenges
+              : category === "Ideas"
+                ? ideaChallenges
+                : objectChallenges;
       for (const challenge of challengeSet) {
         const score = scoreFor(category, subject, challenge, id);
         byCategory[category].push({
@@ -171,13 +289,13 @@ function defaultCards() {
           category,
           score,
           difficulty: difficultyFor(score),
-          imageHints: imageHintsFor(category, subject, score, challenge.actionHint),
+          imageHints: imageHintsFor(category, subject, score),
         });
         id += 1;
       }
     }
   }
-  return categories.flatMap((category) => byCategory[category].slice(0, cardQuotas[category])).slice(0, 999);
+  return categories.flatMap((category) => byCategory[category]);
 }
 
 function makeTeams(count = DEFAULT_SETTINGS.teamCount) {
@@ -304,6 +422,7 @@ function setTheme() {
 }
 
 let imageRequestId = 0;
+let activeImageKey = "";
 const imageCache = new Map();
 
 function cardImageHints(card) {
@@ -313,22 +432,17 @@ function cardImageHints(card) {
   return [];
 }
 
-async function searchCommonsImage(query) {
-  const normalized = query.toLowerCase().replace(/[^\w\s-]/g, " ").replace(/\s+/g, " ").trim();
-  if (!normalized) return "";
+async function searchReferenceImage(hint) {
+  const title = (hint.title || hint.query || "").replace(/[^\w\s-]/g, " ").replace(/\s+/g, " ").trim();
+  if (!title) return "";
+  const normalized = title.toLowerCase();
   if (imageCache.has(normalized)) return imageCache.get(normalized);
-  const url = "https://commons.wikimedia.org/w/api.php"
-    + "?action=query&generator=search&gsrnamespace=6&gsrlimit=6"
-    + `&gsrsearch=${encodeURIComponent(normalized)}`
-    + "&prop=imageinfo&iiprop=url|mime&iiurlwidth=420&format=json&origin=*";
+  const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title.replace(/\s+/g, "_"))}`;
   try {
     const response = await fetch(url);
+    if (!response.ok) throw new Error("No exact article");
     const data = await response.json();
-    const pages = Object.values(data.query?.pages || {});
-    const image = pages
-      .map((page) => page.imageinfo?.[0])
-      .find((info) => info?.thumburl && /^image\/(jpeg|png|webp)$/i.test(info.mime || ""));
-    const result = image?.thumburl || "";
+    const result = data.thumbnail?.source || data.originalimage?.source || "";
     imageCache.set(normalized, result);
     return result;
   } catch {
@@ -348,6 +462,9 @@ function loadImage(url) {
 
 async function renderPromptImage(card) {
   const box = $("promptImage");
+  const key = card?.id || "";
+  if (activeImageKey === key) return;
+  activeImageKey = key;
   const requestId = ++imageRequestId;
   const hints = cardImageHints(card);
   box.hidden = true;
@@ -357,7 +474,7 @@ async function renderPromptImage(card) {
   }
   const loaded = [];
   for (const hint of hints) {
-    const url = await searchCommonsImage(hint.query);
+    const url = await searchReferenceImage(hint);
     if (requestId !== imageRequestId) return;
     const safeUrl = url ? await loadImage(url) : "";
     if (requestId !== imageRequestId) return;
