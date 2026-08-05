@@ -10,8 +10,9 @@ A one-phone Pictionary helper for a group sharing the same device.
 4. Draw as many cards as the turn limit allows.
 5. Tap a card's score button only if that card was successfully drawn and guessed.
 6. Tap the scored card again to undo the score.
-7. When time runs out, the app advances to the next team automatically.
+7. When time runs out, score the cards below, then tap Next team manually.
 8. The host panel contains settings, card editing, and reset controls.
+9. Tap Rules ? for a bilingual rulebook and specification page.
 
 Card edits are saved in the browser on that phone. The shared GitHub Pages URL does not sync custom edits across different phones.
 
