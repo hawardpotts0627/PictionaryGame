@@ -234,12 +234,15 @@ h2 {
   width: 100%;
   min-height: 54px;
   border-radius: 16px;
+  background: var(--surface-2);
+  color: var(--text);
   font-weight: 900;
 }
 
 .primary {
   margin-top: 14px;
   background: linear-gradient(135deg, var(--accent-2), var(--accent));
+  color: var(--text);
 }
 
 .secondary {
