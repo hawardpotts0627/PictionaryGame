@@ -1,5 +1,5 @@
 const STORAGE_KEY = "phone-pictionary-v2";
-const SETTINGS_VERSION = 11;
+const SETTINGS_VERSION = 12;
 const DEFAULT_SETTINGS = { teamCount: 2, limit: 20, seconds: 120, rounds: 0 };
 
 const colors = [
@@ -116,17 +116,17 @@ const objectChallenges = [
   { add: 1, text: (s) => `Draw someone finding ${s}.` },
   { add: 1, text: (s) => `Draw ${s} under a table.` },
   { add: 2, text: (s) => `Draw ${s} during a storm.` },
-  { add: 2, text: (s) => `Draw ${s} being used the wrong way.` },
-  { add: 2, text: (s) => `Draw ${s} hidden in a messy room.` },
+  { add: 2, text: (s) => `Draw ${s} balanced on a tall stack of books.` },
+  { add: 2, text: (s) => `Draw ${s} blocking a doorway.` },
   { add: 3, text: (s) => `Draw ${s} being repaired in a hurry.` },
-  { add: 3, text: (s) => `Draw ${s} causing a small accident.` },
+  { add: 3, text: (s) => `Draw ${s} knocking over a glass of water.` },
   { add: 3, text: (s) => `Draw ${s} as the only clue in a mystery.` },
   { add: 4, text: (s) => `Draw ${s} floating down a river.` },
   { add: 4, text: (s) => `Draw ${s} being protected like a treasure.` },
   { add: 4, text: (s) => `Draw ${s} arriving in the mail.` },
   { add: 5, text: (s) => `Draw ${s} becoming the center of attention.` },
   { add: 5, text: (s) => `Draw ${s} in a museum display case.` },
-  { add: 6, text: (s) => `Draw ${s} causing everyone to panic.` },
+  { add: 6, text: (s) => `Draw ${s} being carried away by security guards.` },
   { add: 7, text: (s) => `Draw ${s} being treated like a dangerous object.` },
 ];
 
@@ -142,9 +142,9 @@ const placeChallenges = [
   { add: 3, text: (s) => `Draw a surprise performance at ${s}.` },
   { add: 4, text: (s) => `Draw ${s} being flooded with balloons.` },
   { add: 4, text: (s) => `Draw ${s} with one object completely out of place.` },
-  { add: 5, text: (s) => `Draw ${s} being used for the wrong purpose.` },
+  { add: 5, text: (s) => `Draw ${s} with a dinner table set up in the middle.` },
   { add: 5, text: (s) => `Draw ${s} during a very awkward silence.` },
-  { add: 6, text: (s) => `Draw ${s} after something has gone badly wrong.` },
+  { add: 6, text: (s) => `Draw ${s} with a huge cake dropped on the floor.` },
   { add: 7, text: (s) => `Draw ${s} during an emergency announcement.` },
 ];
 
@@ -161,22 +161,22 @@ const peopleActions = [
   { add: 2, text: "getting locked out" },
   { add: 2, text: "explaining a plan on a whiteboard" },
   { add: 3, text: "trying not to laugh" },
-  { add: 3, text: "reading a confusing map" },
+  { add: 3, text: "reading a map upside down" },
   { add: 3, text: "fixing a broken bicycle" },
   { add: 3, text: "chasing a runaway hat" },
   { add: 3, text: "protecting a tiny plant" },
   { add: 4, text: "hiding a birthday present" },
-  { add: 4, text: "arriving at the wrong building" },
+  { add: 4, text: "arriving at a dentist's office with a beach suitcase" },
   { add: 4, text: "pretending to understand a strange machine" },
-  { add: 4, text: "leading a tour in the wrong direction" },
+  { add: 4, text: "leading a tour group into a broom closet" },
   { add: 5, text: "arguing with their own reflection" },
   { add: 5, text: "escaping from a maze" },
   { add: 5, text: "trying to impress a very bored audience" },
   { add: 5, text: "calming down two angry customers" },
-  { add: 6, text: "explaining a mistake to a crowd" },
+  { add: 6, text: "apologizing beside a broken vase while everyone stares" },
   { add: 7, text: "pretending everything is fine during a disaster" },
   { add: 7, text: "being interviewed on live television" },
-  { add: 8, text: "realizing they forgot something very important" },
+  { add: 8, text: "running back for a forgotten passport" },
 ];
 
 const countryChallenges = [
@@ -198,7 +198,7 @@ const stateChallenges = [
   { add: 2, text: (s) => `Draw ${s} in a small apartment.` },
   { add: 2, text: (s) => `Draw ${s} during a party.` },
   { add: 3, text: (s) => `Draw someone trying to hide ${s}.` },
-  { add: 3, text: (s) => `Draw ${s} causing a misunderstanding.` },
+  { add: 3, text: (s) => `Draw two people pointing at different doors during ${s}.` },
   { add: 4, text: (s) => `Draw ${s} while everyone is in a hurry.` },
   { add: 4, text: (s) => `Draw ${s} in a public place.` },
   { add: 5, text: (s) => `Draw ${s} becoming the main problem of the day.` },
